@@ -1,4 +1,4 @@
-package day1028;
+package day1028.chat;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,6 +23,7 @@ public class ChatClient extends JFrame implements KeyListener, ActionListener{
 	JTextField t_input;
 	JButton bt;
 	JButton bt_open; //대화상대방을 띄우는 버튼
+	ChatClient2 ch2;
 	
 	public ChatClient() {
 		//나보다 부모가 먼저 태어나야 함.super() , JFrame("부모창")
@@ -102,14 +103,16 @@ public class ChatClient extends JFrame implements KeyListener, ActionListener{
 		area.append(msg+"\n");
 		t_input.setText("");//빈텍스트로 초기화
 		
-		//너에 대한 채팅처리..
+		//너에 대한 채팅처리..		
+		ch2.area.append(msg+"\n");
+		ch2.t_input.setText("");//빈텍스트로 초기화
 		
 	}
 	
 	//대화할 상대방 윈도우 띄우기!!
 	public void open() {
 		//ChatClient2를 화면에 띄우기!!
-		new ChatClient2();
+		ch2=new ChatClient2(this);
 		
 	}
 	

@@ -1,4 +1,4 @@
-package day1028;
+package day1028.chat;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -19,8 +19,10 @@ public class ChatClient2 extends JFrame implements KeyListener{
 	JPanel p_south;
 	JTextField t_input;
 	JButton bt;
+	ChatClient ch; //null
 	
-	public ChatClient2() {
+	public ChatClient2(ChatClient ch) {
+		this.ch = ch;
 		//생성 
 		area = new JTextArea();
 		scroll = new JScrollPane(area);
@@ -62,17 +64,19 @@ public class ChatClient2 extends JFrame implements KeyListener{
 		int key = e.getKeyCode(); //키코드 값 반환
 		
 		if(key == 10) {//엔터 치면...
-			String msg = t_input.getText();//텍스트필드 값을 구하자!!
-			area.append(msg+"\n");
-			t_input.setText("");//빈텍스트로 초기화
+			send();
 		}
 	}
-	
-	public static void main(String[] args) {
-		new ChatClient2();
-	}
-
-	
+	public void send() {
+		//나에 대한 처리..
+		String msg = t_input.getText();//텍스트필드 값을 구하자!!
+		area.append(msg+"\n");
+		t_input.setText("");//빈텍스트로 초기화
+		
+		//너에 대한 처리 
+		ch.area.append(msg+"\n");
+		ch.t_input.setText("");//빈텍스트로 초기화	
+	}	
 }
 
 
