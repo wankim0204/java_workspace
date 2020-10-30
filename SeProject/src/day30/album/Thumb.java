@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 //썸네일 하나를 정의한다!!
@@ -16,16 +17,20 @@ public class Thumb extends JPanel implements MouseListener{
 	Image img;
 	public static final int WIDTH=75;
 	public static final int HEIGHT=55;
+	GalleryApp galleryApp; //필요하면  has a 로 참조한다!! 현재 null
 	
-	public Thumb(String src) {
+	public Thumb(String src, GalleryApp galleryApp) {
+		this.galleryApp=galleryApp; // injection 주입받는다고 한다!!
 		kit = Toolkit.getDefaultToolkit();
 		img=kit.getImage(src);
 		img=img.getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
 		
 		setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		setBackground(Color.BLACK);
-		
+		this.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
 		this.addMouseListener(this);//리스너와 연결 
+		
+		
 	}
 
 	public void paint(Graphics g) {
@@ -35,6 +40,11 @@ public class Thumb extends JPanel implements MouseListener{
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		System.out.println("썸네일 눌럿어?");
+		
+		//n을 지금 나의 .index값으로... 
+		//현재 패널이 ArrayList 내에서의 몇번째 인덱스에 들어있는지 역추적!!
+		galleryApp.n=galleryApp.list.indexOf(this);
+		galleryApp.updateData();
 	}
 	
 	@Override
