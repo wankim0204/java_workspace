@@ -1,4 +1,4 @@
-package day30.album;
+package day1030.album;
 
 import java.awt.Color;
 import java.awt.Dimension;

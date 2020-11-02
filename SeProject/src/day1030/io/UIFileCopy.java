@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -44,6 +45,8 @@ public class UIFileCopy extends JFrame implements ActionListener{
 		add(bt);
 		
 		bt.addActionListener(this);//버튼과 리스너 연결 
+		
+
 		
 		setSize(740,180);
 		setVisible(true);
