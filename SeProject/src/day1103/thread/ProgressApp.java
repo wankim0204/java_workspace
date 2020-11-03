@@ -14,49 +14,41 @@ import javax.swing.SwingConstants;
 
 public class ProgressApp extends JFrame{
 	JLabel la;
-	JProgressBar bar;
-	Thread barThread;//바를 증가시킬 쓰레드
-	int n=0;
+	JProgressBar bar1,bar2,bar3;
+
+	BarThread t1,t2,t3;//바를 증가시킬 쓰레드
 	
 	public ProgressApp() {
 		la = new JLabel("0", SwingConstants.CENTER);
-		bar = new JProgressBar();
-
-		barThread = new Thread() {
-			public void run() {
-				while(true){
-					n++;
-					setBarValue();
-					try {
-						Thread.sleep(50); //non-runnable 에 빠져있다가 0.5초뒤 복귀하라는 명령
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		};
-		
+		bar1 = new JProgressBar();
+		bar2 = new JProgressBar();
+		bar3 = new JProgressBar();
+	
 		//스타일
 		la.setPreferredSize(new Dimension(500, 150));
 		la.setFont(new Font("Verdana",Font.BOLD|Font.ITALIC,90));
-		bar.setPreferredSize(new Dimension(500, 70));
+		bar1.setPreferredSize(new Dimension(500, 70));
+		bar2.setPreferredSize(new Dimension(500, 70));
+		bar3.setPreferredSize(new Dimension(500, 70));
 		
 		setLayout(new FlowLayout());	
 		add(la);
-		add(bar);
+		add(bar1);
+		add(bar2);
+		add(bar3);
 		
-		setSize(600,300);
+		//쓰레드 3개 생성하여  runnable로 진입시키자!!
+		t1 = new BarThread(bar1, 200);
+		t2 = new BarThread(bar2, 150);
+		t3 = new BarThread(bar3, 10);
+		t1.start();
+		t2.start();
+		t3.start();
+		
+		setSize(600,500);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
-		barThread.start();//쓰레드 동작!!
 	}
-	
-	//바의 값 제어 
-	public void setBarValue() {
-		bar.setValue(n); //20퍼센트가 채워짐
-	}
-	
 	public static void main(String[] args) {
 		new ProgressApp();
 	}
