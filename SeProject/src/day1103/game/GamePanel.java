@@ -2,6 +2,7 @@ package day1103.game;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -22,11 +23,14 @@ public class GamePanel extends JPanel {
 	//Bullet bullet;
 	//다수의 총알을 담기 위한 컬렉션 프레임웍 중 List 를 이용해보자!!
 	ArrayList<Bullet> bulletList=new ArrayList<Bullet>();
+	ArrayList<Enemy> enemyList=new ArrayList<Enemy>();
+	Image bgImg;
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		
+		createBg(); //배경 생성
 		createHero();//주인공 생성
+		createEnemy();//적군 생성
 		
 		loopThread = new Thread() {
 			public void run() {
@@ -63,10 +67,10 @@ public class GamePanel extends JPanel {
 	public void moveKey(int key){
 		// 37부터 시계방향으로 ...
 		switch(key) {
-			case KeyEvent.VK_LEFT:hero.velX=-2;break;
-			case KeyEvent.VK_RIGHT:hero.velX=2;break;
-			case KeyEvent.VK_UP:hero.velY=-2;break;
-			case KeyEvent.VK_DOWN:hero.velY=2;break;
+			case KeyEvent.VK_LEFT:hero.velX=-5;break;
+			case KeyEvent.VK_RIGHT:hero.velX=5;break;
+			case KeyEvent.VK_UP:hero.velY=-5;break;
+			case KeyEvent.VK_DOWN:hero.velY=5;break;
 			case KeyEvent.VK_SPACE:fire();break;
 		}
 	}
@@ -83,9 +87,33 @@ public class GamePanel extends JPanel {
 	//총알 발사 
 	public void fire() {
 		Image img=ImageUtil.getIcon(this.getClass(), "res/game/ball.png", 20, 20).getImage();
-		Bullet bullet = new Bullet(img, hero.x + hero.width, hero.y + (hero.height/2), 20, 20, 10, 10);
+		Bullet bullet = new Bullet(this ,img, hero.x + hero.width, hero.y + (hero.height/2), 20, 20, 10, 10);
 		bulletList.add(bullet);//생성된 총알을 bulletList 에 담자!!		
 	}
+	
+	//배경이미지 생성
+	public void createBg() {
+		bgImg=ImageUtil.getIcon(this.getClass(), "res/game/bg.jpg", WIDTH, HEIGHT).getImage();
+	}
+	
+	
+	//적군 생성 
+	public void createEnemy() {
+		String[] path= {"e1.png","e2.png","e3.png","e4.png","e5.png"};
+		
+		for(int i=0;i<path.length;i++) {
+			Image img=ImageUtil.getIcon(this.getClass(), "res/game/"+path[i], 80, 60).getImage();
+			Enemy enemy = new Enemy(img, WIDTH-50, 50+(100*i), 80, 60, -1, 0);
+			enemyList.add(enemy); //적군 목록에 추가!!
+		}
+	}
+	
+	//게임의 상황 , 정보 출력 
+	public void printData(Graphics2D g2) {
+		g2.setFont(new Font("Arial Black",Font.BOLD, 25));
+		g2.drawString("Bullet Count : "+bulletList.size()  , 100, 50);
+	}
+	
 	
 	//물리량 변경
 	public void tick() {
@@ -96,14 +124,28 @@ public class GamePanel extends JPanel {
 			Bullet bullet = bulletList.get(i);
 			bullet.tick();//다수의 총알에 대한 .tick()
 		}
+		
+		//적군에 대한 tick()
+		for(int i=0;i<enemyList.size();i++) {
+			Enemy enemy = enemyList.get(i);
+			enemy.tick();
+		}
 	}
 	public void render(Graphics2D g2) {
+		g2.drawImage(bgImg, 0, 0, this);//배경도 그리자
+		
 		hero.render(g2);
 		
 		for(int i=0;i<bulletList.size();i++) {
 			Bullet bullet = bulletList.get(i);
 			bullet.render(g2);//다수의 총알에 대한 .tick()
 		}
+		for(int i=0;i<enemyList.size();i++) {
+			Enemy enemy = enemyList.get(i);
+			enemy.render(g2);
+		}
+		
+		printData(g2);
 	}
 	
 	//모든 게임의  tick(), render() 를 호출! 즉 게임엔진!!

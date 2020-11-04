@@ -23,11 +23,11 @@ public class GameWindow extends JFrame{
 		//윈도우와 리스너 연결 
 		this.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				System.out.println("눌렀어?");
+				//System.out.println("눌렀어?");
 				gamePanel.moveKey(e.getKeyCode());
 			}
 			public void keyReleased(KeyEvent e) {
-				System.out.println("눌렀어?");
+				//System.out.println("눌렀어?");
 				gamePanel.stopKey(e.getKeyCode());
 			}
 		});
