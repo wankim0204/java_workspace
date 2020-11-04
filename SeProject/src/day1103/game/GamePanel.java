@@ -24,6 +24,7 @@ public class GamePanel extends JPanel {
 	//다수의 총알을 담기 위한 컬렉션 프레임웍 중 List 를 이용해보자!!
 	ArrayList<Bullet> bulletList=new ArrayList<Bullet>();
 	ArrayList<Enemy> enemyList=new ArrayList<Enemy>();
+	ArrayList<Block> blockList=new ArrayList<Block>();
 	Image bgImg;
 	
 	public GamePanel() {
@@ -31,6 +32,7 @@ public class GamePanel extends JPanel {
 		createBg(); //배경 생성
 		createHero();//주인공 생성
 		createEnemy();//적군 생성
+		createBlock();//블락 생성
 		
 		loopThread = new Thread() {
 			public void run() {
@@ -108,6 +110,16 @@ public class GamePanel extends JPanel {
 		}
 	}
 	
+	//블락 생성 
+	public void createBlock() {
+		
+		for(int i=0;i<20;i++) {
+			Image img=ImageUtil.getIcon(this.getClass(), "res/game/block.png", 60, 60).getImage();
+			Block block = new Block(img, 300+(i*60) , 600 , 60, 60, 0, 0);
+			blockList.add(block); //블락 목록에 추가!!
+		}
+	}
+	
 	//게임의 상황 , 정보 출력 
 	public void printData(Graphics2D g2) {
 		g2.setFont(new Font("Arial Black",Font.BOLD, 25));
@@ -135,6 +147,11 @@ public class GamePanel extends JPanel {
 			Enemy enemy = enemyList.get(i);
 			enemy.tick();
 		}
+		//블럭에 대한 tick()
+		for(int i=0;i<blockList.size();i++) {
+			Block block = blockList.get(i);
+			block.tick();
+		}
 	}
 	public void render(Graphics2D g2) {
 		g2.drawImage(bgImg, 0, 0, this);//배경도 그리자
@@ -148,6 +165,10 @@ public class GamePanel extends JPanel {
 		for(int i=0;i<enemyList.size();i++) {
 			Enemy enemy = enemyList.get(i);
 			enemy.render(g2);
+		}
+		for(int i=0;i<blockList.size();i++) {
+			Block block = blockList.get(i);
+			block.render(g2);
 		}
 		
 		printData(g2);
