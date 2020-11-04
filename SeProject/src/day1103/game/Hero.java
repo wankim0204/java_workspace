@@ -15,19 +15,20 @@ public class Hero extends GameObject{
 	public void tick() {
 		this.x +=this.velX;
 		this.y += this.velY;
+		
+		rect.x=x;
+		rect.y=y;
 	}
 	
 	//그래픽 처리 (화면 그려질 처리)
 	//모든 게임 케릭터는 패널에 그려야 하므로,  g2를 패널의  paint() 메서드
 	//의 지역변수를 받아오자!!
 	public void render(Graphics2D g2) {
-		if(img==null) {
-			g2.setColor(Color.RED);
-			g2.fillRect(x, y, 100, 45);
-		}else {
-			g2.drawImage(img, x, y, null);
-		}
+		//g2.setColor(Color.RED);
+		g2.drawRect(rect.x, rect.y, rect.width, rect.height);
 		
+		//우리가 이미 보유하고 있는 사각형을 시각화 시켜보자!!		
+		g2.drawImage(img, rect.x, rect.y, null);
 	}
 	
 }
