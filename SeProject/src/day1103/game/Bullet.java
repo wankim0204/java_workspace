@@ -40,6 +40,10 @@ public class Bullet extends GameObject{
 				
 				//너죽자
 				gamePanel.enemyList.remove(enemy);
+				
+				//점수 증가 
+				gamePanel.score +=10;
+				break;
 			}
 		}
 		
@@ -52,6 +56,7 @@ public class Bullet extends GameObject{
 				
 				//너죽자
 				gamePanel.blockList.remove(block);	
+				break;
 			}
 		}
 	}

@@ -27,6 +27,7 @@ public class GamePanel extends JPanel {
 	ArrayList<Block> blockList=new ArrayList<Block>();
 	GameBg[] gameBg=new GameBg[2];
 	boolean flag=false; //최초에는 게임이 멈춰있어야 하므로..
+	int score=0; //점수
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -108,9 +109,12 @@ public class GamePanel extends JPanel {
 	public void createEnemy() {
 		String[] path= {"e1.png","e2.png","e3.png","e4.png","e5.png"};
 		
-		for(int i=0;i<path.length;i++) {
-			Image img=ImageUtil.getIcon(this.getClass(), "res/game/"+path[i], 80, 60).getImage();
-			Enemy enemy = new Enemy(img, WIDTH-50, 50+(100*i), 80, 60, -2, 0);
+		for(int i=0;i<20;i++) {
+			double r = Math.random();
+			int n = (int)(r*path.length);
+			//System.out.println(n);
+			Image img=ImageUtil.getIcon(this.getClass(), "res/game/"+path[n], 80, 60).getImage();
+			Enemy enemy = new Enemy(img, WIDTH-50, 50+(80*i), 80, 60, -2, 0);
 			enemyList.add(enemy); //적군 목록에 추가!!
 		}
 	}
@@ -132,6 +136,7 @@ public class GamePanel extends JPanel {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Bullet: "+bulletList.size());
 		sb.append(" Enemy: "+enemyList.size());
+		sb.append(" Score: "+score);
 		
 		g2.drawString(sb.toString()  , 100, 50);
 	}
