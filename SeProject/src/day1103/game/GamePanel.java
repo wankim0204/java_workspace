@@ -89,7 +89,7 @@ public class GamePanel extends JPanel {
 	//총알 발사 
 	public void fire() {
 		Image img=ImageUtil.getIcon(this.getClass(), "res/game/ball.png", 20, 20).getImage();
-		Bullet bullet = new Bullet(this ,img, hero.x + hero.width, hero.y + (hero.height/2), 20, 20, 10, 10);
+		Bullet bullet = new Bullet(this ,img, hero.x + hero.width, hero.y + (hero.height/2), 20, 20, 10, 0);
 		bulletList.add(bullet);//생성된 총알을 bulletList 에 담자!!		
 	}
 	
