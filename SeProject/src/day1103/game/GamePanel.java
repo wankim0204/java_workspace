@@ -26,6 +26,7 @@ public class GamePanel extends JPanel {
 	ArrayList<Enemy> enemyList=new ArrayList<Enemy>();
 	ArrayList<Block> blockList=new ArrayList<Block>();
 	GameBg[] gameBg=new GameBg[2];
+	boolean flag=false; //최초에는 게임이 멈춰있어야 하므로..
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -37,7 +38,7 @@ public class GamePanel extends JPanel {
 		loopThread = new Thread() {
 			public void run() {
 				while(true) {
-					gameLoop();
+					if(flag)gameLoop();
 					try {
 						Thread.sleep(10); // 1/1000 초
 					} catch (InterruptedException e) {

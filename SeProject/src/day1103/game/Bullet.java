@@ -43,6 +43,17 @@ public class Bullet extends GameObject{
 			}
 		}
 		
+		//총알인 나와 다수의 블럭간 교차여부 
+		for(int i=0;i<gamePanel.blockList.size();i++) {
+			Block block=gamePanel.blockList.get(i);
+			//나죽고(List 에서 제거하면, 더이상 tick(), render() 호출이 일어나지 않으므로 화면에서  사라짐..)
+			if(this.rect.intersects(block.rect)) {
+				gamePanel.bulletList.remove(this);
+				
+				//너죽자
+				gamePanel.blockList.remove(block);	
+			}
+		}
 	}
 	
 	
