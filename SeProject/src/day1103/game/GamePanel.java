@@ -67,7 +67,7 @@ public class GamePanel extends JPanel {
 	//  2) 클래스패스 :  클래스로더.getResources()
 	public void createHero() {
 		Image img=ImageUtil.getIcon(this.getClass(), "res/game/plane.png", 100, 65).getImage();
-		hero = new Hero(img , 200, 200, 100, 65, 0, 0);
+		hero = new Hero(this, img , 200, 200, 100, 65, 0, 0);
 	}
 	
 	//게임윈도우로부터 어떤 방향키가 눌렸는지를 전달받자!!

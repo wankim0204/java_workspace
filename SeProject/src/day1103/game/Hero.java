@@ -8,9 +8,13 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 
 public class Hero extends GameObject{
-	public Hero(Image img, int x, int y, int width, int height, int velX, int velY) {
+	GamePanel gamePanel; //enemyList가 있는 클래스라서..
+	
+	public Hero(GamePanel gamePanel, Image img, int x, int y, int width, int height, int velX, int velY) {
 		super(img, x,y,width,height,velX,velY);
+		this.gamePanel =gamePanel;
 	}
+	
 	//물리량 변화(데이터의 변화)
 	public void tick() {
 		this.x +=this.velX;
@@ -18,7 +22,21 @@ public class Hero extends GameObject{
 		
 		rect.x=x;
 		rect.y=y;
+		collisionCheck();
 	}
+	
+	public void  collisionCheck() {
+		//적군과 나의 충돌여부를 판단하고, 만일 충돌하면 나의 HP죽고 너죽고 , 
+		for(int i=0;i<gamePanel.enemyList.size();i++) {
+			Enemy enemy = gamePanel.enemyList.get(i);
+			if(this.rect.intersects(enemy.rect)) { //충돌..
+				gamePanel.hpList.remove(gamePanel.hpList.size()-1);//나  hp죽이고
+				gamePanel.enemyList.remove(enemy);//너죽고
+				break;
+			}
+		}
+	}
+	
 	
 	//그래픽 처리 (화면 그려질 처리)
 	//모든 게임 케릭터는 패널에 그려야 하므로,  g2를 패널의  paint() 메서드
