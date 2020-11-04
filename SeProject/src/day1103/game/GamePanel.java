@@ -26,6 +26,8 @@ public class GamePanel extends JPanel {
 	ArrayList<Enemy> enemyList=new ArrayList<Enemy>();
 	ArrayList<Block> blockList=new ArrayList<Block>();
 	GameBg[] gameBg=new GameBg[2];
+	ArrayList<HP> hpList=new ArrayList<HP>();
+	
 	boolean flag=false; //최초에는 게임이 멈춰있어야 하므로..
 	int score=0; //점수
 	
@@ -35,6 +37,7 @@ public class GamePanel extends JPanel {
 		createHero();//주인공 생성
 		createEnemy();//적군 생성
 		createBlock();//블락 생성
+		createHP(); //에너지 생성
 		
 		loopThread = new Thread() {
 			public void run() {
@@ -129,6 +132,17 @@ public class GamePanel extends JPanel {
 		}
 	}
 	
+	//HP생성 
+	public void createHP() {
+		Image img=ImageUtil.getIcon(this.getClass(), "res/game/heart.png", 30, 30).getImage();
+		
+		for(int i=0;i<4;i++) {
+			HP hp = new HP(img, 50+(32*i), 60, 30,30, 0, 0);
+			hpList.add(hp);
+		}
+	}
+	
+	
 	//게임의 상황 , 정보 출력 
 	public void printData(Graphics2D g2) {
 		g2.setFont(new Font("Arial Black",Font.BOLD, 25));
@@ -138,7 +152,7 @@ public class GamePanel extends JPanel {
 		sb.append(" Enemy: "+enemyList.size());
 		sb.append(" Score: "+score);
 		
-		g2.drawString(sb.toString()  , 100, 50);
+		g2.drawString(sb.toString() , 50, 50);
 	}
 	
 	
@@ -166,7 +180,13 @@ public class GamePanel extends JPanel {
 		for(int i=0;i<gameBg.length;i++) {
 			gameBg[i].tick();
 		}
+		//HP에 대한  tick()
+		for(int i=0;i<hpList.size();i++) {
+			HP hp = hpList.get(i);
+			hp.tick();
+		}
 	}
+	
 	public void render(Graphics2D g2) {
 		//배경에 대한  render()
 		for(int i=0;i<gameBg.length;i++) {
@@ -186,6 +206,10 @@ public class GamePanel extends JPanel {
 		for(int i=0;i<blockList.size();i++) {
 			Block block = blockList.get(i);
 			block.render(g2);
+		}
+		for(int i=0;i<hpList.size();i++) {
+			HP hp = hpList.get(i);
+			hp.render(g2);
 		}
 		
 		printData(g2);
