@@ -111,7 +111,12 @@ public class GamePanel extends JPanel {
 	//게임의 상황 , 정보 출력 
 	public void printData(Graphics2D g2) {
 		g2.setFont(new Font("Arial Black",Font.BOLD, 25));
-		g2.drawString("Bullet Count : "+bulletList.size()  , 100, 50);
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("Bullet: "+bulletList.size());
+		sb.append(" Enemy: "+enemyList.size());
+		
+		g2.drawString(sb.toString()  , 100, 50);
 	}
 	
 	
