@@ -29,6 +29,7 @@ public class GamePanel extends JPanel {
 	ArrayList<HP> hpList=new ArrayList<HP>();
 	
 	boolean flag=false; //최초에는 게임이 멈춰있어야 하므로..
+	boolean over=false; //game over  메시지 띄울지 여부..
 	int score=0; //점수
 	
 	public GamePanel() {
@@ -153,8 +154,17 @@ public class GamePanel extends JPanel {
 		sb.append(" Score: "+score);
 		
 		g2.drawString(sb.toString() , 50, 50);
+
+		if(over)showGameOver(g2); //게임종료 메시지 띄우기
 	}
 	
+	public void showGameOver(Graphics2D g2) {
+		g2.setFont(new Font("Arial Black",Font.BOLD, 200));
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("Game Over");
+		g2.drawString(sb.toString() , 50, 400);		
+	}
 	
 	//물리량 변경
 	public void tick() {

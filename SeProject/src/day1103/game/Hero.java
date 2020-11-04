@@ -22,19 +22,29 @@ public class Hero extends GameObject{
 		
 		rect.x=x;
 		rect.y=y;
-		collisionCheck();
+		
+		if(gamePanel.hpList.size() >=1) { //에너지가 1개이상일 경우만..
+			collisionCheck();
+		}else {
+			System.out.println("게임 종료, 에너지 모두 소진");
+			gamePanel.over=true;
+			gamePanel.flag=false;
+		}
+		
 	}
 	
 	public void  collisionCheck() {
-		//적군과 나의 충돌여부를 판단하고, 만일 충돌하면 나의 HP죽고 너죽고 , 
+		//적군과 나의 충돌여부를 판단하고, 만일 충돌하면 나의 HP죽고 너죽고 ,
 		for(int i=0;i<gamePanel.enemyList.size();i++) {
 			Enemy enemy = gamePanel.enemyList.get(i);
+			
 			if(this.rect.intersects(enemy.rect)) { //충돌..
 				gamePanel.hpList.remove(gamePanel.hpList.size()-1);//나  hp죽이고
 				gamePanel.enemyList.remove(enemy);//너죽고
 				break;
 			}
 		}
+		
 	}
 	
 	
