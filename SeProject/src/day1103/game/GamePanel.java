@@ -25,7 +25,7 @@ public class GamePanel extends JPanel {
 	ArrayList<Bullet> bulletList=new ArrayList<Bullet>();
 	ArrayList<Enemy> enemyList=new ArrayList<Enemy>();
 	ArrayList<Block> blockList=new ArrayList<Block>();
-	Image bgImg;
+	GameBg[] gameBg=new GameBg[2];
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -95,7 +95,11 @@ public class GamePanel extends JPanel {
 	
 	//배경이미지 생성
 	public void createBg() {
-		bgImg=ImageUtil.getIcon(this.getClass(), "res/game/bg.jpg", WIDTH, HEIGHT).getImage();
+		Image img=ImageUtil.getIcon(this.getClass(), "res/game/bg.jpg", WIDTH, HEIGHT).getImage();
+		
+		//생성된 이미지로 배경객체 2개를 생성하자!!
+		gameBg[0] = new GameBg(img, 0, 0, WIDTH, HEIGHT, -1, 0);
+		gameBg[1] = new GameBg(img, WIDTH, 0, WIDTH, HEIGHT, -1, 0);
 	}
 	
 	
@@ -105,7 +109,7 @@ public class GamePanel extends JPanel {
 		
 		for(int i=0;i<path.length;i++) {
 			Image img=ImageUtil.getIcon(this.getClass(), "res/game/"+path[i], 80, 60).getImage();
-			Enemy enemy = new Enemy(img, WIDTH-50, 50+(100*i), 80, 60, -1, 0);
+			Enemy enemy = new Enemy(img, WIDTH-50, 50+(100*i), 80, 60, -2, 0);
 			enemyList.add(enemy); //적군 목록에 추가!!
 		}
 	}
@@ -152,9 +156,16 @@ public class GamePanel extends JPanel {
 			Block block = blockList.get(i);
 			block.tick();
 		}
+		//배경에 대한  tick()
+		for(int i=0;i<gameBg.length;i++) {
+			gameBg[i].tick();
+		}
 	}
 	public void render(Graphics2D g2) {
-		g2.drawImage(bgImg, 0, 0, this);//배경도 그리자
+		//배경에 대한  render()
+		for(int i=0;i<gameBg.length;i++) {
+			gameBg[i].render(g2);
+		}
 		
 		hero.render(g2);
 		
