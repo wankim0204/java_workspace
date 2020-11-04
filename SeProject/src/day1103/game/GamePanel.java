@@ -4,10 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.KeyAdapter;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
+
+import common.image.ImageUtil;
 
 //사실상 모든~게임의 그래픽처리는  패널이 담당하게 됨!!
 public class GamePanel extends JPanel {
@@ -16,7 +19,9 @@ public class GamePanel extends JPanel {
 	public static final int HEIGHT=900;
 	
 	Hero hero;
-	Bullet bullet;
+	//Bullet bullet;
+	//다수의 총알을 담기 위한 컬렉션 프레임웍 중 List 를 이용해보자!!
+	ArrayList<Bullet> bulletList=new ArrayList<Bullet>();
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -47,9 +52,11 @@ public class GamePanel extends JPanel {
 		render(g2);
 	}
 	
-	
+	//  1) 플랫폼종속된 경로 : Toolkit
+	//  2) 클래스패스 :  클래스로더.getResources()
 	public void createHero() {
-		hero = new Hero(200, 200, 50, 50, 0, 0);
+		Image img=ImageUtil.getIcon(this.getClass(), "res/game/plane.png", 100, 65).getImage();
+		hero = new Hero(img , 200, 200, 100, 65, 0, 0);
 	}
 	
 	//게임윈도우로부터 어떤 방향키가 눌렸는지를 전달받자!!
@@ -75,17 +82,28 @@ public class GamePanel extends JPanel {
 	
 	//총알 발사 
 	public void fire() {
-		bullet = new Bullet(hero.x, hero.y, 50, 50, 10, 10);
+		Image img=ImageUtil.getIcon(this.getClass(), "res/game/ball.png", 20, 20).getImage();
+		Bullet bullet = new Bullet(img, hero.x + hero.width, hero.y + (hero.height/2), 20, 20, 10, 10);
+		bulletList.add(bullet);//생성된 총알을 bulletList 에 담자!!		
 	}
 	
 	//물리량 변경
 	public void tick() {
 		hero.tick();
-		if(bullet!=null)bullet.tick();
+		
+		//java ver 5 improved for statement
+		for(int i=0;i<bulletList.size();i++) {
+			Bullet bullet = bulletList.get(i);
+			bullet.tick();//다수의 총알에 대한 .tick()
+		}
 	}
 	public void render(Graphics2D g2) {
 		hero.render(g2);
-		if(bullet!=null)bullet.render(g2);
+		
+		for(int i=0;i<bulletList.size();i++) {
+			Bullet bullet = bulletList.get(i);
+			bullet.render(g2);//다수의 총알에 대한 .tick()
+		}
 	}
 	
 	//모든 게임의  tick(), render() 를 호출! 즉 게임엔진!!

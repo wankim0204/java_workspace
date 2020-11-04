@@ -4,10 +4,11 @@
  * */
 package day1103.game;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 
 public abstract class GameObject {
+	Image img;
 	int x;
 	int y;
 	int width;
@@ -15,7 +16,8 @@ public abstract class GameObject {
 	int velX;
 	int velY;
 	
-	public GameObject(int x, int y, int width, int height, int velX, int velY) {
+	public GameObject(Image img, int x, int y, int width, int height, int velX, int velY) {
+		this.img=img;
 		this.x=x;
 		this.y=y;
 		this.width=width;
