@@ -82,6 +82,7 @@ public class ShoppingApp extends JFrame{
 	Toolkit kit=Toolkit.getDefaultToolkit();//플랫폼 종속적인 경로로 가져올때는 툴킷 쓰자
 	File file;
 	Image img;
+	ProductController productController;
 	
 	public ShoppingApp() {
 		//서쪽영역 생성 
@@ -134,7 +135,7 @@ public class ShoppingApp extends JFrame{
 		ch_category = new Choice();
 		t_keyword = new JTextField();
 		bt_search = new JButton("검색");
-		table = new JTable();
+		table = new JTable(productController = new ProductController());
 		scroll = new JScrollPane(table);
 		
 		//스타일 적용
@@ -422,6 +423,36 @@ public class ShoppingApp extends JFrame{
 					e.printStackTrace();
 				}
 			}
+		}
+		
+	}
+	
+	//product 테이블의 레코드 가져오기 
+	public void getProductList() {
+		String sql="select * from product";
+		
+		PreparedStatement pstmt=null;
+		ResultSet rs = null;
+		
+		try {
+			pstmt=con.prepareStatement(sql);//쿼리준비
+			rs = pstmt.executeQuery(); //select문 수행 후 결과표를 rs에 대입
+			
+			//rs의 표 데이터를 ProductController가 보유한  data이차원 배열에 대입!!
+			String[][] data = String[총레코드수][6];
+			
+			rs.next();
+			String[] record = new String[6];
+			record[0] = rs.getString("product_id");
+			record[1] = rs.getString("subcategory_id");
+			record[2] = rs.getString("product_id");
+			record[3] = rs.getString("brand");
+			record[4] = rs.getString("price");
+			record[5] = rs.getString("filename");
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 	}
