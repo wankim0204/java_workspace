@@ -7,6 +7,9 @@ import java.awt.BorderLayout;
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -72,6 +75,8 @@ public class ShoppingApp extends JFrame{
 	Connection con;//접속 성공이 되면, 그 정보를 가진 인터페이스
 	HashMap<String, Integer> map=new HashMap<String, Integer>(); //컬렉션 프레임웍 중,  key -value 의 쌍으로 객체를 관리해주는 객체
 	JFileChooser chooser=new JFileChooser("D:/workspace/java_workspace/SeProject/res/travel2");
+	Toolkit kit=Toolkit.getDefaultToolkit();//플랫폼 종속적인 경로로 가져올때는 툴킷 쓰자
+	Image img;
 	
 	public ShoppingApp() {
 		//서쪽영역 생성 
@@ -82,7 +87,11 @@ public class ShoppingApp extends JFrame{
 		t_brand = new JTextField();
 		t_price = new JTextField();
 		bt_find = new JButton("이미지찾기");
-		can = new JPanel();
+		can = new JPanel() {
+			public void paint(Graphics g) {
+				g.drawImage(img, 0, 0, can);
+			}
+		};
 		bt_regist = new JButton("등록");
 		
 		ch_top.add("choose category");
@@ -223,7 +232,8 @@ public class ShoppingApp extends JFrame{
 		bt_find.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				findImage();//쇼핑몰에 사용할 상품이미지 선택!!
-			}
+				preview();
+			}	
 		});
 		
 		setSize(1000,600);
@@ -340,12 +350,14 @@ public class ShoppingApp extends JFrame{
 			//파일정보를 구한다!!
 			File file = chooser.getSelectedFile();
 			System.out.println("당신이 지금 선택한 파일의 정보 : "+file.getAbsolutePath());
+			img=kit.getImage(file.getAbsolutePath()); //멤버변수  img값을 구한다!!	
 		}
 	}
 	
 	//미리보기 구현
 	public void preview() {
-		
+		//paint로 그림 처리~~
+		can.repaint();
 	}
 	
 	
