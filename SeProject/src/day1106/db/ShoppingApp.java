@@ -33,6 +33,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import common.image.ImageUtil;
+
 public class ShoppingApp extends JFrame{
 	JPanel p_west; //전체 중 서쪽
 	JPanel p_center; //전체 중 가운데
@@ -74,8 +76,11 @@ public class ShoppingApp extends JFrame{
 	
 	Connection con;//접속 성공이 되면, 그 정보를 가진 인터페이스
 	HashMap<String, Integer> map=new HashMap<String, Integer>(); //컬렉션 프레임웍 중,  key -value 의 쌍으로 객체를 관리해주는 객체
+	HashMap<String, Integer> map2=new HashMap<String, Integer>(); //컬렉션 프레임웍 중,  key -value 의 쌍으로 객체를 관리해주는 객체
+	
 	JFileChooser chooser=new JFileChooser("D:/workspace/java_workspace/SeProject/res/travel2");
 	Toolkit kit=Toolkit.getDefaultToolkit();//플랫폼 종속적인 경로로 가져올때는 툴킷 쓰자
+	File file;
 	Image img;
 	
 	public ShoppingApp() {
@@ -236,6 +241,13 @@ public class ShoppingApp extends JFrame{
 			}	
 		});
 		
+		//등록버튼과 리스너 연결 
+		bt_regist.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				regist();
+			}
+		});
+		
 		setSize(1000,600);
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -322,6 +334,7 @@ public class ShoppingApp extends JFrame{
 			//서브카테고리 채우기 
 			while(rs.next()) {
 				ch_sub.add(rs.getNString("name"));
+				map2.put(rs.getString("name"), rs.getInt("subcategory_id"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -348,9 +361,10 @@ public class ShoppingApp extends JFrame{
 	public void findImage() {
 		if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 			//파일정보를 구한다!!
-			File file = chooser.getSelectedFile();
+			file = chooser.getSelectedFile();
 			System.out.println("당신이 지금 선택한 파일의 정보 : "+file.getAbsolutePath());
 			img=kit.getImage(file.getAbsolutePath()); //멤버변수  img값을 구한다!!	
+			img = ImageUtil.getCustomSize(img, 135, 115);
 		}
 	}
 	
@@ -358,6 +372,58 @@ public class ShoppingApp extends JFrame{
 	public void preview() {
 		//paint로 그림 처리~~
 		can.repaint();
+	}
+	
+	//등록 구현하기 
+	public void regist() {
+		//물음표 값 결정짓기 
+		int subcategory_id=map2.get(ch_sub.getSelectedItem()); //??
+		String product_name = t_name.getText();
+		String brand = t_brand.getText();
+		int price = Integer.parseInt(t_price.getText());
+		String filename = file.getName();//풀경로말고 이미지명만..
+		
+		System.out.println("subcategory_id: "+ subcategory_id );
+		System.out.println("product_name: "+ product_name);
+		System.out.println("brand: "+ brand );
+		System.out.println("price: "+ price );
+		System.out.println("filename: "+ filename);
+		
+		String sql="insert into product(product_id, subcategory_id, product_name, brand,price,filename)";
+		sql+=" values(seq_product.nextval, ?,?,?,?,?)";
+		
+		PreparedStatement pstmt=null;
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			//바인드 변수 지정후에 쿼리 수행해야 한다!!
+			pstmt.setInt(1,subcategory_id);
+			pstmt.setString(2, product_name);
+			pstmt.setString(3, brand);
+			pstmt.setInt(4,price);
+			pstmt.setString(5,filename);
+			
+			//아래의 메서드의 반환값? 이 쿼리문에 의해 영향받는 레코드 수를 반환 , 따라서  insert 경우엔 성공인 언제나1
+			//update, delete는 실패일 경우 0,,성공이면 1이상임..
+			int result = pstmt.executeUpdate(); //DML(insert , update ,delete 의 경우)
+			
+			if(result ==0) {
+				JOptionPane.showMessageDialog(this, "등록실패ㅜㅜ");  
+			}else {
+				JOptionPane.showMessageDialog(this, "등록성공^^");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 	}
 	
 	
