@@ -296,6 +296,7 @@ public class ShoppingApp extends JFrame{
 				
 				//선택한 제품의 알맞는 카테고리 선택되어 있게..!!
 				setCategory(row);
+				setSubCategory(row);
 				getDetail(row); //상세보기 출력
 				
 				String filename= (String)table.getValueAt(row, 5);
@@ -641,6 +642,9 @@ public class ShoppingApp extends JFrame{
 	}
 	
 	public void setCategory(int row) {
+		PreparedStatement pstmt=null;
+		ResultSet rs = null;
+		
 		String subcategory_id = (String)table.getValueAt(row, 1);
 		
 		String sql="select * from topcategory where topcategory_id=(";
@@ -648,7 +652,76 @@ public class ShoppingApp extends JFrame{
 		sql+=")";
 		
 		System.out.println(sql);
+		
+		try {
+			pstmt=con.prepareStatement(sql);//쿼리문 준비
+			rs = pstmt.executeQuery(); //쿼리문 실행
+			
+			if(rs.next()) {//레코드가 있다면...
+				//select 메서드는 선택될 아이템 지정할 수 있다.. 
+				ch_top2.select(rs.getString("name"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}
+		
 	}
+	
+	public void setSubCategory(int row) {
+		PreparedStatement pstmt=null;
+		ResultSet rs = null;
+		
+		String subcategory_id = (String)table.getValueAt(row, 1);
+		
+		String sql="select * from subcategory where subcategory_id="+subcategory_id;
+		
+		System.out.println(sql);
+		
+		try {
+			pstmt=con.prepareStatement(sql);//쿼리문 준비
+			rs = pstmt.executeQuery(); //쿼리문 실행
+			
+			if(rs.next()) {//레코드가 있다면...
+				//select 메서드는 선택될 아이템 지정할 수 있다.. 
+				ch_sub2.select(rs.getString("name"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}		
+	}
+	
 	
 	//접속 해제
 	public void disconnect() {
