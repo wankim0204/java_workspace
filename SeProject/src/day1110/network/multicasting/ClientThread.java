@@ -17,6 +17,7 @@ public class ClientThread extends Thread{
 	Socket socket;
 	BufferedReader buffr;
 	BufferedWriter buffw;
+	boolean flag=true;
 	
 	public ClientThread(MultiClient multiClient, Socket socket) {
 		this.multiClient=multiClient;
@@ -39,7 +40,7 @@ public class ClientThread extends Thread{
 	public void listen() {
 		String msg=null;
 		try {
-			while(true) {
+			while(flag) {
 				msg=buffr.readLine();
 				multiClient.area.append(msg+"\n"); //대화기록하기
 			}

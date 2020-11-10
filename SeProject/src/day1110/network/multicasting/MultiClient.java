@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -84,6 +86,16 @@ public class MultiClient extends JFrame{
 				}
 			}
 		});
+		
+		//현재프레임과 윈도우리스너 연결
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				clientThread.send("exit");//나간다는 의사를 서버에 전송하자!! 
+				clientThread.flag=false;
+				System.exit(0);// 클라이언트의 프로세스도 종료
+			} 
+		});
+
 		
 		setBounds(300,200,300,400);
 		setVisible(true);

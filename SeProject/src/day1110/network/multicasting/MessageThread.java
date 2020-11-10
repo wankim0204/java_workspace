@@ -15,6 +15,7 @@ public class MessageThread extends Thread{
 	BufferedReader buffr;//듣기
 	BufferedWriter buffw;//말하기
 	MultiServer multiServer;
+	boolean flag=true;
 	
 	public MessageThread(MultiServer multiServer, Socket socket) {
 		this.multiServer=multiServer;
@@ -37,10 +38,19 @@ public class MessageThread extends Thread{
 	public void listen() {
 		String msg=null;
 		try {
-			while(true) {
+			while(flag) {
 				msg=buffr.readLine(); //현재로서는 한번만 듣는다..
-				multiServer.area.append(msg+"\n");
-				send(msg);//클라이언트에게 다시 보내야 한다(서버의 의무)
+				
+				//코드명령어 중 나간다는 뜻이면...나가는 처리
+				if(msg.equals("exit")) {
+					//1) 백터명단에서 제거하고   2) flag도 false :  쓰레드	Dead
+					multiServer.clientList.remove(this); //나를 명단에서 제거
+					flag=false;					
+					multiServer.area.append("현재까지 접속자 수 "+multiServer.clientList.size()+"\n");
+				}else{//아닌 경우
+					multiServer.area.append(msg+"\n");
+					send(msg);//클라이언트에게 다시 보내야 한다(서버의 의무)
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
