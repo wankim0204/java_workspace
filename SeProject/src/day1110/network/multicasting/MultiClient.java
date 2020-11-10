@@ -33,8 +33,7 @@ public class MultiClient extends JFrame{
 	JButton bt_send;
 	
 	Socket socket; //대화용 소켓 
-	BufferedReader buffr;
-	BufferedWriter buffw;
+	ClientThread clientThread;
 	
 	public MultiClient() {
 		p_north = new JPanel();
@@ -71,8 +70,7 @@ public class MultiClient extends JFrame{
 		
 		bt_send.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				send();
-				listen();
+				clientThread.send(t_input.getText());
 				t_input.setText("");
 			}
 		});
@@ -81,8 +79,7 @@ public class MultiClient extends JFrame{
 		t_input.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					send();
-					listen();
+					clientThread.send(t_input.getText());
 					t_input.setText("");
 				}
 			}
@@ -98,9 +95,9 @@ public class MultiClient extends JFrame{
 			socket = new Socket(ch_ip.getSelectedItem(), Integer.parseInt(t_port.getText()));
 			area.append("서버에 접속\n ");
 			
-			//접속이 성공되었으므로, 스트림을 얻을 수 있다. 
-			buffr=new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			buffw=new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			//무한루프로 메시지를 받고, 메시지를 보내줄 쓰레드 생성 
+			clientThread = new ClientThread(this, socket);
+			clientThread.start();//runnable 상태로 진입, run메서드를 수행하게됨..
 			
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
@@ -111,30 +108,7 @@ public class MultiClient extends JFrame{
 		}
 	}
 	
-	//서버에 메시지 보내기(출력)
-	public void send() {
-		String msg = t_input.getText(); //유저가 입력한 텍스트박스 메시지
-		try {
-			
-			
-			buffw.write(msg+"\n");
-			buffw.flush(); //남아있는 데이터없이, 버퍼비우기
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
-	//서버가 보낸 메시지 듣기 
-	public void listen() {
-		String msg=null;
-		try {
-			msg=buffr.readLine();
-			area.append(msg+"\n"); //대화기록하기
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	public static void main(String[] args) {
 		new MultiClient();
