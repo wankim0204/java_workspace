@@ -116,7 +116,7 @@ public class MultiClient extends JFrame{
 		String msg = t_input.getText(); //유저가 입력한 텍스트박스 메시지
 		try {
 			
-			//백터에 들어있는 메시지쓰레드만큼 반복문 수행하면서 .write, flush 수행하면 됨(멀티 케스팅!!)
+			
 			buffw.write(msg+"\n");
 			buffw.flush(); //남아있는 데이터없이, 버퍼비우기
 			
