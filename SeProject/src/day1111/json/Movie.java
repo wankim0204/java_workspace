@@ -50,7 +50,7 @@ public class Movie extends JPanel implements Runnable{
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
 				System.out.println("클릭한 저의 영화제목은 "+title);
-				jsonGallery.getDetail(big);
+				jsonGallery.getDetail(big,title,phase,category_name, release_year);
 			}
 		});
 	}
