@@ -27,11 +27,19 @@ public class JsonGallery extends JFrame{
 	JPanel p_can; //큰 그림이 그려질 패널 
 	JPanel p_detail; //상세내용이 출력될 패널
 	
+	Thread thread; //원격지의 URL 이미지를 로드하는 동안, 그래픽 처리가 먹통이 되버린다..이 문제를 해결하기 위함
+	
 	public JsonGallery() {
 		p_center = new JPanel();
 		p_south = new JPanel();
 		p_can = new JPanel();
 		p_detail = new JPanel();
+		
+		thread = new Thread() {
+			public void run() {
+				createThumb();//썸네일 구성하기 
+			}
+		};
 		
 		p_center.setLayout(new GridLayout(1, 2));//1층 2호수 그리드 적용 
 		
@@ -49,12 +57,14 @@ public class JsonGallery extends JFrame{
 		add(p_center);
 		add(p_south, BorderLayout.SOUTH);
 		
-		createThumb();//썸네일 구성하기 
+		
 		
 		setVisible(true);
 		setSize(800,700);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);		
+		
+		thread.start(); //수집 시작~~
 	}
 	
 	//영화 썸네일 생성하기!
@@ -79,17 +89,21 @@ public class JsonGallery extends JFrame{
 			
 			//파싱 
 			JSONParser jsonParser = new JSONParser();
+			
 			JSONObject jsonObject=(JSONObject)jsonParser.parse(sb.toString());//문자열에 불과했던 json 표기법문자열을 실제 json객체로 반환!!
 			JSONArray jsonArray=(JSONArray)jsonObject.get("marvel");
 			
 			//따라서 이 시점부터 마치 객체처럼 접근하여 사용이 가능하다!! 
-			JSONObject obj=(JSONObject)jsonArray.get(3); //영화 한편 반환!!
-			
-			System.out.println(obj.get("title")); //토르 
-			System.out.println(obj.get("phase")); //어셈블드..
-			
-			Thumbnail thumbnail = new Thumbnail(90, 90, (String)obj.get("url"));
-			p_south.add(thumbnail);//생성된 썸네일을 p_south 패널에 부착!
+			for(int i=0;i<jsonArray.size();i++) {
+				JSONObject obj=(JSONObject)jsonArray.get(i); //영화 한편 반환!!
+				
+				System.out.println(obj.get("title")); //토르 
+				System.out.println(obj.get("phase")); //어셈블드..
+				
+				Thumbnail thumbnail = new Thumbnail(45, 45, (String)obj.get("url"));
+				p_south.add(thumbnail);//생성된 썸네일을 p_south 패널에 부착!
+				p_south.updateUI();
+			}
 			
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
@@ -100,8 +114,6 @@ public class JsonGallery extends JFrame{
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
-		//p_south.updateUI();
 	}
 	
 	public static void main(String[] args) {

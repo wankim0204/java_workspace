@@ -14,9 +14,14 @@ import javax.swing.JPanel;
 public class Thumbnail extends JPanel{ 
 	Image img; //썸네일로 그려질 이미지
 	BufferedImage buffImg;
+	int width;
+	int height;
 	
 	public Thumbnail(int width, int height, String path) {
+		this.width=width;
+		this.height=height;
 		this.setPreferredSize(new Dimension(width, height));
+		
 		//1.이미지가 로컬 하드에 잇을 경우 Toolkit  을 사용!
 		//2.이미지가 클래스패스상 즉 패키지에 있을 경우 ClassLoader() 로 이용 
 		//3.BufferedImage  > ImageIO
@@ -28,7 +33,19 @@ public class Thumbnail extends JPanel{
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println("이미지를 찾을 수 없네요");
+			getErrorImage();
 		}		
+	}
+	
+	public void getErrorImage() {
+		URL url = this.getClass().getClassLoader().getResource("res/twitter.png");
+		try {
+			BufferedImage buffImg = ImageIO.read(url);
+			img = buffImg.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	//그림 그리기 
