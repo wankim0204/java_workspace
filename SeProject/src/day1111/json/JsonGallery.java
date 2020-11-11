@@ -27,20 +27,12 @@ public class JsonGallery extends JFrame{
 	JPanel p_can; //큰 그림이 그려질 패널 
 	JPanel p_detail; //상세내용이 출력될 패널
 	
-	Thread thread; //원격지의 URL 이미지를 로드하는 동안, 그래픽 처리가 먹통이 되버린다..이 문제를 해결하기 위함
-	
 	public JsonGallery() {
 		p_center = new JPanel();
 		p_south = new JPanel();
 		p_can = new JPanel();
 		p_detail = new JPanel();
-		
-		thread = new Thread() {
-			public void run() {
-				createThumb();//썸네일 구성하기 
-			}
-		};
-		
+			
 		p_center.setLayout(new GridLayout(1, 2));//1층 2호수 그리드 적용 
 		
 		//스타일 적용
@@ -62,9 +54,7 @@ public class JsonGallery extends JFrame{
 		setVisible(true);
 		setSize(800,700);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);		
-		
-		thread.start(); //수집 시작~~
+		setLocationRelativeTo(null);			
 	}
 	
 	//영화 썸네일 생성하기!
