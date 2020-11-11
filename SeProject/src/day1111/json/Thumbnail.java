@@ -19,8 +19,10 @@ public class Thumbnail extends JPanel implements Runnable{
 	int height;
 	String path;
 	Thread thread;
+	JsonGallery jsonGallery;
 	
-	public Thumbnail(int width, int height, String path) {
+	public Thumbnail(JsonGallery jsonGallery, int width, int height, String path) {
+		this.jsonGallery=jsonGallery;
 		this.width=width;
 		this.height=height;
 		this.path=path;
@@ -55,6 +57,8 @@ public class Thumbnail extends JPanel implements Runnable{
 			URL url=new URL(path);
 			buffImg = ImageIO.read(url);
 			img = buffImg.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+			
+			jsonGallery.p_south.updateUI();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

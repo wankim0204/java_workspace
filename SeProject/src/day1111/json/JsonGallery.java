@@ -55,6 +55,8 @@ public class JsonGallery extends JFrame{
 		setSize(800,700);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);			
+		
+		createThumb();
 	}
 	
 	//영화 썸네일 생성하기!
@@ -90,9 +92,9 @@ public class JsonGallery extends JFrame{
 				System.out.println(obj.get("title")); //토르 
 				System.out.println(obj.get("phase")); //어셈블드..
 				
-				Thumbnail thumbnail = new Thumbnail(45, 45, (String)obj.get("url"));
+				Thumbnail thumbnail = new Thumbnail(this, 45, 45, (String)obj.get("url"));
 				p_south.add(thumbnail);//생성된 썸네일을 p_south 패널에 부착!
-				p_south.updateUI();
+				//p_south.updateUI();
 			}
 			
 		} catch (URISyntaxException e) {
