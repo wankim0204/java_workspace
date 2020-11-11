@@ -3,6 +3,7 @@ package day1111.json;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -16,6 +17,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.json.simple.JSONArray;
@@ -28,6 +30,8 @@ public class JsonGallery extends JFrame{
 	JPanel p_south; //썸네일을 부착할 남쪽패널 
 	JPanel p_can; //큰 그림이 그려질 패널 
 	JPanel p_detail; //상세내용이 출력될 패널
+	JLabel[] la=new JLabel[4]; //[][][][]
+	String[] la_title= {"Title","Phase","Category","Release"};
 	Image big; //상세 이미지
 	
 	public JsonGallery() {
@@ -39,6 +43,14 @@ public class JsonGallery extends JFrame{
 			}
 		};
 		p_detail = new JPanel();
+		
+		for(int i=0;i<la.length;i++) {
+			la[i] = new JLabel(la_title[i]);
+			//스타일
+			la[i].setPreferredSize(new Dimension(380, 50));
+			la[i].setFont(new Font("Verdana",Font.BOLD, 28));
+			p_detail.add(la[i]);
+		}
 			
 		p_center.setLayout(new GridLayout(1, 2));//1층 2호수 그리드 적용 
 		
