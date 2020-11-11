@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -28,6 +30,12 @@ public class BoardList extends JPanel {
 		add(bt, BorderLayout.SOUTH);
 		setPreferredSize(new Dimension(780, 500));
 		setVisible(true);
+		
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent e) {
+				boardApp.setPage(BoardApp.BOARD_DETAIL);//상세보기
+			}
+		});
 		
 		bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
