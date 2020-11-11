@@ -3,7 +3,9 @@ package day1111.json;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,11 +28,16 @@ public class JsonGallery extends JFrame{
 	JPanel p_south; //썸네일을 부착할 남쪽패널 
 	JPanel p_can; //큰 그림이 그려질 패널 
 	JPanel p_detail; //상세내용이 출력될 패널
+	Image big; //상세 이미지
 	
 	public JsonGallery() {
 		p_center = new JPanel();
 		p_south = new JPanel();
-		p_can = new JPanel();
+		p_can = new JPanel() {
+			public void paint(Graphics g) {
+				g.drawImage(big, 0, 0, p_can);
+			}
+		};
 		p_detail = new JPanel();
 			
 		p_center.setLayout(new GridLayout(1, 2));//1층 2호수 그리드 적용 
@@ -89,10 +96,14 @@ public class JsonGallery extends JFrame{
 			for(int i=0;i<jsonArray.size();i++) {
 				JSONObject obj=(JSONObject)jsonArray.get(i); //영화 한편 반환!!
 				
-				System.out.println(obj.get("title")); //토르 
-				System.out.println(obj.get("phase")); //어셈블드..
+				String u=(String)obj.get("url");
+				String title=(String)obj.get("title");
+				String phase=(String)obj.get("phase");
+				String category_name=(String)obj.get("category_name");
+				String release_year=((Long)obj.get("release_year")).toString();
+
+				Movie thumbnail = new Movie(this, 45, 45, u,title, phase,category_name,release_year);
 				
-				Thumbnail thumbnail = new Thumbnail(this, 45, 45, (String)obj.get("url"));
 				p_south.add(thumbnail);//생성된 썸네일을 p_south 패널에 부착!
 				//p_south.updateUI();
 			}
@@ -106,6 +117,18 @@ public class JsonGallery extends JFrame{
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	//상세내용 출력하기 
+	public void getDetail(Image big) {
+		//이미지 처리 
+		this.big =big;
+		p_can.repaint();
+		
+		
+		//제목,등의 영화정보 출력 
+		
 	}
 	
 	public static void main(String[] args) {
