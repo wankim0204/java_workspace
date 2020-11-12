@@ -18,10 +18,11 @@ public class BoardList extends JPanel {
 	JScrollPane scroll;
 	JButton bt;
 	BoardApp boardApp;
+	BoardModel boardModel;
 	
 	public BoardList(BoardApp boardApp) {
 		this.boardApp=boardApp;
-		table = new JTable(8,5);
+		table = new JTable(boardModel = new BoardModel());
 		scroll = new JScrollPane(table);
 		bt=new JButton("글등록");
 		
@@ -49,7 +50,18 @@ public class BoardList extends JPanel {
 		});
 		
 	}
+	
+	//게시물 가져오기!
+	//rs에 담겨진 데이터를 TableModel 이 보유한 이차원배열 data에 대입!!
+	public void getList() {
+		
+	}
+	
 }
+
+
+
+
 
 
 
