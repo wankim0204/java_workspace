@@ -1,6 +1,10 @@
 package day1111.member;
 
 import java.awt.Dimension;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -40,7 +44,34 @@ public class Login extends JPanel{
 		bt_regist.addActionListener((e)->{
 			boardApp.setPage(BoardApp.MEMBER_REGIST);
 		});
+		
+		//로그인 버튼과 리스너 연결 
+		bt_login.addActionListener((e)->{
+			login();
+		});
 	}
+	
+	//43분까지~!!
+	public void login() {
+		
+		//회원입니다,  회원이 아닙니다
+		Connection con=null;
+		PreparedStatement pstm=null;;
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521", "user1104", "user1104");
+			String sql="select * from board_member where m_id=? and m_pass=?";
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	
 }
 
 
