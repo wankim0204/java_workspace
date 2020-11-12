@@ -37,8 +37,45 @@ public class RegistForm extends JPanel{
 		
 		add(p_container);
 		setVisible(true);		
+		
+		//가입버튼과 리스너 연결 
+		bt.addActionListener((e)->{
+			regist();
+		});
+	}
+	
+	/*
+	 * 오라클에 접속하여 insert 실행!! 
+	 * 1.드라이버로드 
+	 * 2.접속
+	 * 3.쿼리문실행
+	 * 4.db닫기
+	 */	
+	public void regist() {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			System.out.println("드라이버 로드 성공");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
