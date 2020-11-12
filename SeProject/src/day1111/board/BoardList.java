@@ -39,6 +39,11 @@ public class BoardList extends JPanel {
 		
 		bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				//글쓰기 폼의 작성자에, 아이디 넣어두기!!
+				BoardWrite page=(BoardWrite)boardApp.getPages(BoardApp.BOARD_WRITE);
+				page.t_writer.setText(boardApp.getBoardMember().getM_id());
+				
 				boardApp.setPage(BoardApp.BOARD_WRITE);//글쓰기 폼 보여주기 
 			}
 		});

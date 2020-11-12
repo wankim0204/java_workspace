@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import common.image.ImageUtil;
+import day1111.member.BoardMember;
 import day1111.member.Login;
 import day1111.member.RegistForm;
 
@@ -27,7 +28,7 @@ public class BoardApp extends JFrame{
 	JButton bt_board, bt_regist, bt_login;
 	JPanel p_center;
 	
-	JPanel[] pages=new JPanel[5]; //화면전환에 사용될 패널들을 담게될 배열
+	private JPanel[] pages=new JPanel[5]; //화면전환에 사용될 패널들을 담게될 배열
 	
 	//상수란? 변하지 않는 데이터에 의미를 부여하여 직관성을 높이기 위해 사용한다
 	public static final int BOARD_LIST=0;
@@ -47,7 +48,11 @@ public class BoardApp extends JFrame{
 	private Connection con;
 	
 	//로그인 상태 여부를 보관할 변수 
-	boolean hasSession=false;//세션을 보유하고 있는지...
+	private boolean hasSession=false;//세션을 보유하고 있는지...
+	
+	//회원정보를 보관할 자료형?
+	//이 변수에 데이터가 채워지는 시점은?? 로그인 성공할때 인스턴스 생성하자!!
+	private BoardMember boardMember; //현재는 null임
 	
 	public BoardApp() {
 		this.getConnection();//프레임을 보여주기 직전에 데이터베이스 접속 성공해놓자!!
@@ -177,10 +182,36 @@ public class BoardApp extends JFrame{
 		return con;
 	}
 	
+	//getter , setter 
+	
+	
+	
 	public static void main(String[] args) {
 		new BoardApp();
 	}
 
+	public boolean isHasSession() {
+		return hasSession;
+	}
+
+	public void setHasSession(boolean hasSession) {
+		this.hasSession = hasSession;
+	}
+
+	public BoardMember getBoardMember() {
+		return boardMember;
+	}
+
+	public void setBoardMember(BoardMember boardMember) {
+		this.boardMember = boardMember;
+	}
+	
+	
+	//각페이지를접근할 수 있는  getter  
+	public JPanel getPages(int pageName) { 
+		return pages[pageName];
+	}
+	
 }
 
 

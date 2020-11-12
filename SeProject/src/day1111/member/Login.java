@@ -77,6 +77,20 @@ public class Login extends JPanel{
 			if(rs.next()) { //레코드가 존재한다면...회원인증 성공 
 				JOptionPane.showMessageDialog(this, "인증성공");
 				
+				//로그인을 성공했을때 회원정보를 보관 + 인증변수도 true로...
+				boardApp.setHasSession(true);
+				
+				//회원정보 채워넣기!!
+				BoardMember boardMember = new BoardMember(); //empty 
+				boardMember.setMember_id(rs.getInt("member_id"));//id
+				boardMember.setM_id(rs.getString("m_id"));//pk
+				boardMember.setM_pass(rs.getString("m_pass"));//pass
+				boardMember.setM_name(rs.getString("m_name"));//name
+				boardMember.setRegdate(rs.getString("regdate"));//regdate
+				
+				//BoardApp가 보유한 회원정보 객체에 주소값 전달!
+				boardApp.setBoardMember(boardMember);
+				
 				//메인 페이지로 보내기 ( 게시판 목록 )
 				boardApp.setPage(BoardApp.BOARD_LIST);
 				
