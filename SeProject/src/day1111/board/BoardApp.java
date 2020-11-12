@@ -37,16 +37,18 @@ public class BoardApp extends JFrame{
 	public static final int MEMBER_LOGIN=4;
 	
 	//접속에 필요한 정보들..
-	String driver="oracle.jdbc.driver.OracleDriver";
-	String url="jdbc:oracle:thin:@localhost:1521:XE";
-	String user="user1104";
-	String pass="user1104";
+	private String driver="oracle.jdbc.driver.OracleDriver";
+	private String url="jdbc:oracle:thin:@localhost:1521:XE";
+	private String user="user1104";
+	private String pass="user1104";
 	
 	//모든 페이지들이 사용할 접속정보 객체를 공통으로 선언 
 	//이 커넥션 객체는 프로그램이 가동과 동시에 접속을 얻어다 놓자!!
-	Connection con;
+	private Connection con;
 	
 	public BoardApp() {
+		this.getConnection();//프레임을 보여주기 직전에 데이터베이스 접속 성공해놓자!!
+		
 		//생성
 		p_north = new JPanel();
 		bt_board = new JButton(ImageUtil.getIcon(this.getClass(), "res/board.png", 100, 45));
@@ -79,7 +81,6 @@ public class BoardApp extends JFrame{
 		add(p_north, BorderLayout.NORTH);
 		add(p_center);
 		
-		this.getConnection();//프레임을 보여주기 직전에 데이터베이스 접속 성공해놓자!!
 		
 		setVisible(true);
 		setSize(800,600);
@@ -153,6 +154,11 @@ public class BoardApp extends JFrame{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	//다른 객체들이 접근할 수 있도록  getter 제공
+	public Connection getCon() {
+		return con;
 	}
 	
 	public static void main(String[] args) {
