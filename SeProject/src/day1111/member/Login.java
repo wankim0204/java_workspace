@@ -76,6 +76,10 @@ public class Login extends JPanel{
 			//없다면?? 로그인 실패~!
 			if(rs.next()) { //레코드가 존재한다면...회원인증 성공 
 				JOptionPane.showMessageDialog(this, "인증성공");
+				
+				//메인 페이지로 보내기 ( 게시판 목록 )
+				boardApp.setPage(BoardApp.BOARD_LIST);
+				
 			}else {
 				JOptionPane.showMessageDialog(this, "로그인 정보가 올바르지 않습니다");
 			}

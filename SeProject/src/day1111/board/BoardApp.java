@@ -46,6 +46,9 @@ public class BoardApp extends JFrame{
 	//이 커넥션 객체는 프로그램이 가동과 동시에 접속을 얻어다 놓자!!
 	private Connection con;
 	
+	//로그인 상태 여부를 보관할 변수 
+	boolean hasSession=false;//세션을 보유하고 있는지...
+	
 	public BoardApp() {
 		this.getConnection();//프레임을 보여주기 직전에 데이터베이스 접속 성공해놓자!!
 		
@@ -81,6 +84,8 @@ public class BoardApp extends JFrame{
 		add(p_north, BorderLayout.NORTH);
 		add(p_center);
 		
+		//로그인 체크 
+		loginCheck(BoardApp.BOARD_LIST);
 		
 		setVisible(true);
 		setSize(800,600);
@@ -125,6 +130,17 @@ public class BoardApp extends JFrame{
 			}
 		}
 	}
+	
+	//로그인 여부를 판단해서 만일 로그인하지 않았다면, 로그인페이지 보여주기!!
+	public void loginCheck(int page) {
+		if(hasSession==false) {//로그인 하지 않은 상태임!!!
+			JOptionPane.showMessageDialog(this, "로그인이 필요한 서비스입니다");
+			setPage(BoardApp.MEMBER_LOGIN);
+		}else {//로그인 한 사람에게는, 원하는 페이지를 보여준다
+			setPage(page);
+		}
+	}
+	
 	
 	//접속을 시도하는 메서드 정의
 	public void getConnection() {
