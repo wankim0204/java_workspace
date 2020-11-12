@@ -2,11 +2,12 @@ package day1111.member;
 
 import java.awt.Dimension;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -20,9 +21,11 @@ public class Login extends JPanel{
 	JButton bt_regist;
 	JButton bt_login;
 	BoardApp boardApp;
+	Connection con;
 	
 	public Login(BoardApp boardApp) {
 		this.boardApp=boardApp;
+		con = boardApp.getCon();
 		
 		p_container = new JPanel();
 		t_id = new JTextField(30);
@@ -58,21 +61,42 @@ public class Login extends JPanel{
 	 * 하겠음.
 	 * */
 	public void login() {
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
 		
-		//회원입니다,  회원이 아닙니다
-		Connection con=null;
-		PreparedStatement pstm=null;;
-		
+		String sql="select * from board_member where m_id=? and m_pass=?";
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521", "user1104", "user1104");
-			String sql="select * from board_member where m_id=? and m_pass=?";
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			pstmt=con.prepareStatement(sql); //쿼리문 준비 
+			pstmt.setString(1, t_id.getText());
+			pstmt.setString(2, new String(t_pass.getPassword()));
+			
+			rs = pstmt.executeQuery();//쿼리실행, select문이므로 레코드를 담은 ResultSet이 반환된다
+			//로그인의 경우, 제대로 된 인증이 될 경우 레코드는 언제나 몇건이 나올까? 1건
+			//rs가 반환된 시점부터는,rs의 커서를 내렸을때 레코드가 존재한다면? 인증성공으로 간주 
+			//없다면?? 로그인 실패~!
+			if(rs.next()) { //레코드가 존재한다면...회원인증 성공 
+				JOptionPane.showMessageDialog(this, "인증성공");
+			}else {
+				JOptionPane.showMessageDialog(this, "로그인 정보가 올바르지 않습니다");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		
 		
 	}
 	
