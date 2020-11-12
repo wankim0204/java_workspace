@@ -2,14 +2,25 @@ package day1111.board;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import common.image.ImageUtil;
 import day1111.member.Login;
 import day1111.member.RegistForm;
+
+/*
+ * BoardApp가 모든 페이지들을 보유하고 있는 최상위 컨테이너 이므로, 
+ * 각 페이지들마다 서로 공유할 데이터가 있다면 , BoardApp에 데이터를 두고 처리하면 됨
+ * */
 
 public class BoardApp extends JFrame{
 	JPanel p_north;
@@ -24,6 +35,16 @@ public class BoardApp extends JFrame{
 	public static final int BOARD_DETAIL=2;
 	public static final int MEMBER_REGIST=3;
 	public static final int MEMBER_LOGIN=4;
+	
+	//접속에 필요한 정보들..
+	String driver="oracle.jdbc.driver.OracleDriver";
+	String url="jdbc:oracle:thin:@localhost:1521:XE";
+	String user="user1104";
+	String pass="user1104";
+	
+	//모든 페이지들이 사용할 접속정보 객체를 공통으로 선언 
+	//이 커넥션 객체는 프로그램이 가동과 동시에 접속을 얻어다 놓자!!
+	Connection con;
 	
 	public BoardApp() {
 		//생성
@@ -58,10 +79,18 @@ public class BoardApp extends JFrame{
 		add(p_north, BorderLayout.NORTH);
 		add(p_center);
 		
+		this.getConnection();//프레임을 보여주기 직전에 데이터베이스 접속 성공해놓자!!
+		
 		setVisible(true);
 		setSize(800,600);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				disConnection(); //접속해제
+			}
+		});
 		
 		//게시판버튼과 리스너연결
 		bt_board.addActionListener((e)->{
@@ -96,11 +125,46 @@ public class BoardApp extends JFrame{
 		}
 	}
 	
+	//접속을 시도하는 메서드 정의
+	public void getConnection() {
+		try {
+			Class.forName(driver);//드라이버 로드 
+			con = DriverManager.getConnection(url, user, pass); //접속시도 후, 객체 반환
+			if(con==null) { //접속실패인경우 메시지 출력 
+				JOptionPane.showMessageDialog(this, "데이터베이스에 접속하지 못했습니다.");
+			}else {//접속 성공의 경우 윈도우 제목창에 현재 접속자 출력
+				this.setTitle(user+" 접속 중");
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//접속을 해제하는 메서드 정의 
+	//이 메서드는 윈도우창을 닫을때 호출될 예정임
+	public void disConnection() {
+		//null 이 아닐때만 닫아야 함, 만일 이런 확인절차를 거치지 않으면  NullPointerException 발생할수있슴
+		if(con!=null) { 
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public static void main(String[] args) {
 		new BoardApp();
 	}
 
 }
+
+
+
+
+
 
 
 
