@@ -42,6 +42,11 @@ public class BoardList extends JPanel {
 		
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
+				//상세보기가 보유한 getDetail() 메서드 호출하기!!
+				BoardDetail boardDetail=(BoardDetail)boardApp.getPages(BoardApp.BOARD_DETAIL);
+				String board_id = (String)table.getValueAt(table.getSelectedRow() , 0);//board_id
+				boardDetail.getDetail(Integer.parseInt(board_id));
+				
 				boardApp.setPage(BoardApp.BOARD_DETAIL);//상세보기
 			}
 		});
@@ -65,7 +70,7 @@ public class BoardList extends JPanel {
 		PreparedStatement pstmt=null;
 		ResultSet rs= null;
 		
-		String sql="select * from board";
+		String sql="select * from board order by board_id desc";
 		
 		try {
 			pstmt=con.prepareStatement(sql

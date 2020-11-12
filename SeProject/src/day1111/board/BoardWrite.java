@@ -60,7 +60,8 @@ public class BoardWrite extends JPanel{
 		
 		bt_regist.addActionListener((e)->{
 			regist();
-			//목록보기 메서드 호출
+			BoardList boardList=(BoardList)boardApp.getPages(BoardApp.BOARD_LIST);
+			boardList.getList();//목록보기 메서드 호출
 		});
 	}
 	
