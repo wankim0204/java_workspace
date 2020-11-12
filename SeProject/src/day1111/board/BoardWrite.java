@@ -60,6 +60,7 @@ public class BoardWrite extends JPanel{
 		
 		bt_regist.addActionListener((e)->{
 			regist();
+			//목록보기 메서드 호출
 		});
 	}
 	
