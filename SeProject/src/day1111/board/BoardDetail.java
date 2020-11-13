@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -58,6 +59,36 @@ public class BoardDetail extends JPanel{
 		bt_list.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				boardApp.setPage(BoardApp.BOARD_LIST);//목록보기
+			}
+		});
+		
+		//삭제버튼과 리스너 연결 
+		bt_del.addActionListener((e)->{
+			int ans = JOptionPane.showConfirmDialog(this, "삭제하시겠습니까?");
+			
+			if(ans ==JOptionPane.OK_OPTION) {
+				int result=del(board.getBoard_id());
+				if(result==0) {
+					JOptionPane.showMessageDialog(this, "삭제실패");
+				}else {
+					JOptionPane.showMessageDialog(this, "삭제성공");
+					BoardList boardList=(BoardList)boardApp.getPages(BoardApp.BOARD_LIST);
+					boardList.getList();//리스트 갱신
+					boardApp.setPage(BoardApp.BOARD_LIST);//목록 보여주기
+				}			
+			}
+		});
+		
+		//수정버튼과 리스너 연결 
+		bt_edit.addActionListener((e)->{
+			int result=edit(board);
+			if(result==0) {
+				JOptionPane.showMessageDialog(this, "수정실패");
+			}else {
+				JOptionPane.showMessageDialog(this, "수정성공");
+				BoardList boardList=(BoardList)boardApp.getPages(BoardApp.BOARD_LIST);
+				boardList.getList();//리스트 갱신
+				boardApp.setPage(BoardApp.BOARD_LIST);//목록 보여주기				
 			}
 		});
 	}
@@ -112,6 +143,58 @@ public class BoardDetail extends JPanel{
 		
 	}
 	
+	
+	public int del(int board_id) {
+		PreparedStatement pstmt=null;
+		int result=0;
+		
+		String sql="delete from board where board_id="+board_id;
+		//System.out.println(sql);
+		try {
+			pstmt=con.prepareStatement(sql); //쿼리 준비
+			result=pstmt.executeUpdate();//쿼리실행
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
+		
+	}
+	
+	public int edit(Board board) {//낱개로 전달하지말고, 1건의 게시물을 담고있는 인스턴스를 전달하자!!
+		PreparedStatement pstmt=null;
+		int result=0;
+		String sql="update board set title=? , content=? where board_id=?";
+		
+		try {
+			pstmt=con.prepareStatement(sql); //쿼리문 준비
+			
+			pstmt.setString(1, t_title.getText());//사용자가 입력한 값
+			pstmt.setString(2, content.getText());//사용자가 입력한 값
+			pstmt.setInt(3, board.getBoard_id());//기존 상세보기에서의 board_id
+			result=pstmt.executeUpdate();//쿼리문 실행
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}			
+		}
+		return result;
+		
+	}
 }
 
 
