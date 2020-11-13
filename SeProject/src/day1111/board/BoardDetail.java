@@ -58,6 +58,9 @@ public class BoardDetail extends JPanel{
 		
 		bt_list.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				BoardList boardList=(BoardList)boardApp.getPages(BoardApp.BOARD_LIST);
+				boardList.getList();//리스트 갱신
+			
 				boardApp.setPage(BoardApp.BOARD_LIST);//목록보기
 			}
 		});
@@ -91,6 +94,27 @@ public class BoardDetail extends JPanel{
 				boardApp.setPage(BoardApp.BOARD_LIST);//목록 보여주기				
 			}
 		});
+	}
+	
+	//조회수 증가 
+	public void updateHit(int board_id) {
+		PreparedStatement pstmt=null;
+		String sql="update board set hit=hit+1 where board_id="+board_id;
+		try {
+			pstmt=con.prepareStatement(sql);//쿼리문 준비
+			int result = pstmt.executeUpdate();//쿼리문 수행
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 	}
 	
 	//한건 가져오기!!

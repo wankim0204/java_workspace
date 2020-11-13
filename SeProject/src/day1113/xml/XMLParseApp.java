@@ -36,14 +36,23 @@ public class XMLParseApp {
 	InputStreamReader reader;
 	BufferedReader buffr;
 	URL url; //파일이 있는 경로
+	URI uri;
 	File file;
 	
 	public XMLParseApp() {
 		url = this.getClass().getClassLoader().getResource("res/pets.xml");
 		try {
-			URI uri = url.toURI(); //File 클래스의 생성자에서는 URL 이 아닌 URI를 원하므로, 변환하자
+			uri = url.toURI(); //File 클래스의 생성자에서는 URL 이 아닌 URI를 원하므로, 변환하자
+			file = new File(uri);
+			parseData();//파싱 시작!!!!
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void readTest() {
+		try {
 			fis = new FileInputStream(file=new File(uri));
-			
 			//육안으로 확인할때 한글이 깨질수 있으므로 Reader로 업그레이드 하자
 			reader = new InputStreamReader(fis);
 			
@@ -57,24 +66,12 @@ public class XMLParseApp {
 				if(data==null)break;
 				System.out.println(data);
 			}
-			
-			parseData();
-			
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}catch(IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
-		}finally {
-			if(fis!=null) {
-				try {
-					fis.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
+		
 	}
 	
 	//xml 파싱해보자!!
@@ -85,7 +82,7 @@ public class XMLParseApp {
 		
 		try {
 			SAXParser saxParser=factory.newSAXParser();// Factory로부터 파서의 인스턴스를 얻을 수 있다..
-			saxParser.parse(fis, new MyHandler());
+			saxParser.parse(file, new MyHandler());
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
