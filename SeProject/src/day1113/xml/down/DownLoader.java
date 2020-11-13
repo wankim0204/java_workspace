@@ -51,6 +51,12 @@ public class DownLoader extends JFrame{
 		parsingThread = new Thread() {
 			public void run() {
 				parseData();
+				//총 몇건이 존재하는지 출력
+				System.out.println(movieHandler.movieList.size());
+				for(int i=0;i<movieHandler.movieList.size();i++) {
+					Movie movie=movieHandler.movieList.get(i);//영화 추출!!
+					download(movie.getUrl());
+				}
 			}
 		};
 		
@@ -88,7 +94,7 @@ public class DownLoader extends JFrame{
 	public void download(String path) {//매개변수로 가져올 자원을 지정한다!!
 		InputStream is=null;
 		FileOutputStream fos=null; //파일을 저장할 스트림
-		
+		int count=0;
 		try {
 			URL url=new URL(path);
 			URLConnection con=url.openConnection();
@@ -104,6 +110,7 @@ public class DownLoader extends JFrame{
 			int data=-1;
 			while(true) {
 				data=is.read();
+				bar.setValue(count++);
 				if(data==-1)break;
 				fos.write(data);
 			}
