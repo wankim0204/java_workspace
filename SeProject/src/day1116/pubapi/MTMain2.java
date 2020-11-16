@@ -178,6 +178,11 @@ public class MTMain2 extends JFrame{
 		try {
 			saxParser = factory.newSAXParser(); //파서 생성
 			saxParser.parse(is, mountainHandler = new MountainHandler()); //파싱 시작!!!
+			
+			//파싱이 끝나면 TableModel의 백터객체를 파싱한 결과로 얻은 백터로 대체해버리면 된다!!
+			model.data = mountainHandler.mtList;
+			table.updateUI(); //테이블 갱신
+			
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
