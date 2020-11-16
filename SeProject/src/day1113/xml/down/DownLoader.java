@@ -16,6 +16,7 @@ import java.net.URLConnection;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -55,10 +56,16 @@ public class DownLoader extends JFrame{
 					parseData();
 					//총 몇건이 존재하는지 출력
 					System.out.println(movieHandler.movieList.size());
+					
+					int len=movieHandler.movieList.size();//총 다운로드 파일 갯수 len에 담으세요 
+					
 					for(int i=0;i<movieHandler.movieList.size();i++) {
 						Movie movie=movieHandler.movieList.get(i);//영화 추출!!
 						download(movie.getUrl());
 					}
+					//반복문이 모두 수행된 이후 시점이 바로, 다운로드가 모두 완료된 시점이에요!!!!
+					JOptionPane.showMessageDialog(DownLoader.this,"총 "+len+"개의 파일을 다운로드 완료!!");
+					
 				}
 			};
 			
