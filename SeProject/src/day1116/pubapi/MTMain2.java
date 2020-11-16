@@ -47,7 +47,9 @@ public class MTMain2 extends JFrame{
 	String apiKey = "TPK6sq5VdCOFrijK99CmJHQCEVer9GwK4sxLvP6ED6dBExrBc6FO298QjQadJsw7C4sDZ8yBXJfsYZ%2FVT6LG0A%3D%3D";
 	SAXParserFactory factory;
 	SAXParser saxParser;
-	Thread loadThread; //네트워크상에서 xml을 불러올때 사용할 쓰레드
+	Thread loadThread; //네트워크상에서 xml을 불러올때 사용할 쓰레드, 버튼을 누를때마다 인스턴스 생성하여
+									//네트워크 업무 시키자!!
+	
 	InputStream is;//xml 데이터를 담고 있는 스트림
 	MountainHandler mountainHandler;
 	
@@ -77,11 +79,8 @@ public class MTMain2 extends JFrame{
 		scroll = new JScrollPane(table);
 		
 		//생성자에서 쓰레드를 내부익명으로 처리하겠습니다 
-		loadThread = new Thread() {
-			public void run() { //버튼을 누를때 이 쓰레드를 호출하겠습니다
-				loadXML();
-			}
-		};
+		//이코드는 이제 하지 마세요, 최초에 생성자에서 한번만 생성하니깐 문제가 생긴거니까요,
+		//따라서 이 코드는 버튼 누를때 시점으로 내리겠습니다
 		
 		//스타일 적용 
 		p_west.setPreferredSize(new Dimension(200, 600));
@@ -104,6 +103,11 @@ public class MTMain2 extends JFrame{
 		//버튼과 리스너 연결
 		bt.addActionListener((e)->{
 			//네트워크를 타고 데이터를 가져올때 메인쓰레드에서 진행하는게 좋다고 했었나요? ㅋㅋ 네 이렇게 하면 안됩니당
+			loadThread = new Thread() {
+				public void run() { //버튼을 누를때 이 쓰레드를 호출하겠습니다
+					loadXML();
+				}
+			};
 			loadThread.start(); //xml로딩 쓰레드 호출
 		});
 		
@@ -120,7 +124,7 @@ public class MTMain2 extends JFrame{
         try {
 			StringBuilder urlBuilder = new StringBuilder("http://openapi.forest.go.kr/openapi/service/trailInfoService/getforeststoryservice"); /*URL*/
 			urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "="+apiKey); /*Service Key*/
-			urlBuilder.append("&" + URLEncoder.encode("mntnNm","UTF-8") + "=" + URLEncoder.encode("속리산", "UTF-8")); /**/
+			urlBuilder.append("&" + URLEncoder.encode("mntnNm","UTF-8") + "=" + URLEncoder.encode(t_name.getText(), "UTF-8")); /**/
 			urlBuilder.append("&" + URLEncoder.encode("mntnHght","UTF-8") + "=" + URLEncoder.encode("", "UTF-8")); /**/
 			urlBuilder.append("&" + URLEncoder.encode("mntnAdd","UTF-8") + "=" + URLEncoder.encode("", "UTF-8")); /**/
 			urlBuilder.append("&" + URLEncoder.encode("mntnInfoAraCd","UTF-8") + "=" + URLEncoder.encode("", "UTF-8")); /**/
