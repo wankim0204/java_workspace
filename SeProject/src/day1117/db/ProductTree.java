@@ -40,6 +40,8 @@ public class ProductTree extends JFrame{
 	ArrayList<ArrayList> subCategory=new ArrayList<ArrayList>();//하위카테고리
 	
 	public ProductTree() {
+		connect(); //접속;
+		
 		//DB연동하여 배열들의 데이터를 실제 DB 데이터로 가져오자!!
 		getTopCategory();
 		
@@ -52,11 +54,15 @@ public class ProductTree extends JFrame{
 		
 		//노드 생성을 외부 메서드로부터 공수받자!!!
 		DefaultMutableTreeNode top = new DefaultMutableTreeNode("상품정보");
-		
+		/*
 		for(int i=0;i<category.length;i++) {
 			top.add(getCreatedNode(category[i], product[i]));
 		}
-		
+		*/
+		for(int i=0;i<topCategory.size();i++) {
+			String name= topCategory.get(i);
+			top.add(getCreatedNode(name, subCategory.get(i)));
+		}
 		tree = new JTree(top);
 		scroll = new JScrollPane(tree);
 		
@@ -70,7 +76,7 @@ public class ProductTree extends JFrame{
 			}
 		}); 
 		
-		connect(); //접속
+		
 		
 		setSize(400,500);
 		setVisible(true);
@@ -196,8 +202,8 @@ public class ProductTree extends JFrame{
 		DefaultMutableTreeNode parent = new DefaultMutableTreeNode(parentName);//부모생성
 		//자식의 수만큼 노드 만들어 부모에 부착!!
 		if(childName!=null) {//배열을 넘기지 않은 경우엔 실행을 막기위해...
-			for(int i=0;i<childName.length;i++) {
-				parent.add(new DefaultMutableTreeNode(childName[i]));
+			for(int i=0;i<childName.size();i++) {
+				parent.add(new DefaultMutableTreeNode(childName.get(i)));
 			}		
 		}
 		return parent;
