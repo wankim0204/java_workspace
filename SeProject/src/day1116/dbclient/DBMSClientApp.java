@@ -53,17 +53,22 @@ public class DBMSClientApp extends JFrame{
 	String password="1234";
 	Connection con;
 	
-	//테이블 모델로 가면 여러분들이 피곤하므로, 그냥 이차원백터로 가겠습니다.괜찬죠? 옛날기술이라면서 무시하시기 
+	//테이블 모델로 가면 여러분들이 피곤하므로, 그냥 이차원벡터로 가겠습니다.괜찬죠? 옛날기술이라면서 무시하시기 
 	//있기? 없기? ㅋㅋ 
 	
-	//테이블을 출력할 백터 , 및 컬럼
+	//테이블을 출력할 벡터 , 및 컬럼
 	Vector tableList = new Vector(); //이 벡터안에는 추후 또다른 벡터가 들어갈 예정임. 즉 이차원배열과 동일함
 													//단, 이차원배열보다는 크기가 자유로와서 유연함..코딩하기 편함	
 	Vector<String> tableColumn = new Vector<String>(); //컬럼명은 당연히 String이므로..
 	
-	//시퀀스에 필요한 백터들
+	//시퀀스에 필요한 벡터들
 	Vector seqList = new Vector();
 	Vector<String> seqColumn = new Vector<String>();
+	
+	//선택한 테이블에 대한 레코드 출력에 필요한 벡터들 
+	Vector recordList = new Vector();//레코드를 담게될 벡터
+	Vector productColum = new Vector();//product 테이블에 대한 벡터 ?
+	Vector empColum = new Vector();//product 테이블에 대한 벡터 ?
 	
 	public DBMSClientApp() {
 		//생성
@@ -81,11 +86,11 @@ public class DBMSClientApp extends JFrame{
 		//컬럼정보 초기화 하기(이러면 안되겠네요,,,생성자로 원상복귀) 
 		tableColumn.add("table_name");
 		tableColumn.add("tablespace_name");
-		t_tables = new JTable(tableList,tableColumn); //여기서 초기백터값을 넣어주세요, 이 시점엔 아직  
+		t_tables = new JTable(tableList,tableColumn); //여기서 초기벡터값을 넣어주세요, 이 시점엔 아직  
 																			//db연동을 안한 상태이므로 사이즈가 0이지만, 
 																			//추후 메서드 호출시 벡터의 크기가 변경될것이고, 
 																			//JTable 을 새로고침하면 되겟죠?
-		//시퀀스의 생성자에 백터 적용하기
+		//시퀀스의 생성자에 벡터 적용하기
 		seqColumn.add("sequence_name");
 		seqColumn.add("last_number");
 		t_seq = new JTable(seqList, seqColumn);
@@ -211,18 +216,18 @@ public class DBMSClientApp extends JFrame{
 		try {
 			pstmt=con.prepareStatement(sql);//쿼리준비
 			rs=pstmt.executeQuery();//쿼리실행 및 결과집합 받기!!
-			//평소같았으면, 이차원배열 선언한 후 last(), getRow() , 스크롤옵션 등등 아주 성가셨으나, 백터를 이용하면
+			//평소같았으면, 이차원배열 선언한 후 last(), getRow() , 스크롤옵션 등등 아주 성가셨으나, 벡터를 이용하면
 			//그런게 필요없음 
 			
 			
 			while(rs.next()) {
-				Vector vec = new Vector(); //tableList백터에 담겨질 백터
+				Vector vec = new Vector(); //tableList벡터에 담겨질 벡터
 				vec.add(rs.getString("table_name"));
 				vec.add(rs.getString("tablespace_name"));
 				
-				tableList.add(vec);//멤버변수 백터에 백터를 담았으니, 이제 멤버변수 백터는 이차원백터가 됨
+				tableList.add(vec);//멤버변수 벡터에 벡터를 담았으니, 이제 멤버변수 벡터는 이차원벡터가 됨
 			}
-			//완성된 이차원백터를 JTable에 반영해야 함, 생성자의 인수로 넣어야 함!! 
+			//완성된 이차원벡터를 JTable에 반영해야 함, 생성자의 인수로 넣어야 함!! 
 			//컬럼 정보는 어떻게 가져올까요?? 2개밖에 없으니 고정하면 되겠죠?
 			t_tables.updateUI(); //여기서 new 하지 마세요 그냥 updateUI() 합시다
 			//테이블의 레코드와 컬럼갯수 확인 (여전히 0인지 체크) 
@@ -259,12 +264,12 @@ public class DBMSClientApp extends JFrame{
 		try {
 			pstmt=con.prepareStatement(sql);//쿼리준비
 			rs=pstmt.executeQuery();//쿼리실행
-			//rs의 내용을 백터로 옮기자!!, 즉 이차원백터로 만들자!!
+			//rs의 내용을 벡터로 옮기자!!, 즉 이차원벡터로 만들자!!
 			while(rs.next()) {
-				Vector vec = new Vector(); // 레코드를 담을 백터준비( 일차원) 
+				Vector vec = new Vector(); // 레코드를 담을 벡터준비( 일차원) 
 				vec.add(rs.getString("sequence_name"));
 				vec.add(rs.getString("last_number"));
-				seqList.add(vec);//기존 시퀀스 백터에 추가해서 이차원백터로 만들자!!
+				seqList.add(vec);//기존 시퀀스 벡터에 추가해서 이차원벡터로 만들자!!
 			}
 			t_seq.updateUI();//만들어진 벡터를 테이블에 반영한 결과를 업데이트하자
 		} catch (SQLException e) {
