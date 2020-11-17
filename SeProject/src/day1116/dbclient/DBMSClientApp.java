@@ -59,8 +59,11 @@ public class DBMSClientApp extends JFrame{
 	//테이블을 출력할 백터 , 및 컬럼
 	Vector tableList = new Vector(); //이 벡터안에는 추후 또다른 벡터가 들어갈 예정임. 즉 이차원배열과 동일함
 													//단, 이차원배열보다는 크기가 자유로와서 유연함..코딩하기 편함	
-	Vector<String> columnList = new Vector<String>(); //컬럼명은 당연히 String이므로..
+	Vector<String> tableColumn = new Vector<String>(); //컬럼명은 당연히 String이므로..
 	
+	//시퀀스에 필요한 백터들
+	Vector seqList = new Vector();
+	Vector<String> seqColumn = new Vector<String>();
 	
 	public DBMSClientApp() {
 		//생성
@@ -76,13 +79,16 @@ public class DBMSClientApp extends JFrame{
 		
 
 		//컬럼정보 초기화 하기(이러면 안되겠네요,,,생성자로 원상복귀) 
-		columnList.add("table_name");
-		columnList.add("tablespace_name");
-		t_tables = new JTable(tableList,columnList); //여기서 초기백터값을 넣어주세요, 이 시점엔 아직  
+		tableColumn.add("table_name");
+		tableColumn.add("tablespace_name");
+		t_tables = new JTable(tableList,tableColumn); //여기서 초기백터값을 넣어주세요, 이 시점엔 아직  
 																			//db연동을 안한 상태이므로 사이즈가 0이지만, 
 																			//추후 메서드 호출시 벡터의 크기가 변경될것이고, 
 																			//JTable 을 새로고침하면 되겟죠?
-		t_seq = new JTable();
+		//시퀀스의 생성자에 백터 적용하기
+		seqColumn.add("sequence_name");
+		seqColumn.add("last_number");
+		t_seq = new JTable(seqList, seqColumn);
 		s1 = new JScrollPane(t_tables);
 		s2 = new JScrollPane(t_seq);
 		
@@ -243,6 +249,46 @@ public class DBMSClientApp extends JFrame{
 		}
 	}
 	
+	//시퀀스 가져오기 
+	public void getSeqList() {
+		PreparedStatement pstmt=null;
+		ResultSet rs = null;
+		
+		String sql="select sequence_name, last_number from user_sequences";
+		
+		try {
+			pstmt=con.prepareStatement(sql);//쿼리준비
+			rs=pstmt.executeQuery();//쿼리실행
+			//rs의 내용을 백터로 옮기자!!, 즉 이차원백터로 만들자!!
+			while(rs.next()) {
+				Vector vec = new Vector(); // 레코드를 담을 백터준비( 일차원) 
+				vec.add(rs.getString("sequence_name"));
+				vec.add(rs.getString("last_number"));
+				seqList.add(vec);//기존 시퀀스 백터에 추가해서 이차원백터로 만들자!!
+			}
+			t_seq.updateUI();//만들어진 벡터를 테이블에 반영한 결과를 업데이트하자
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}			
+			
+		}
+		
+		
+	}
 	
 	
 	//로그인 
@@ -256,6 +302,7 @@ public class DBMSClientApp extends JFrame{
 		connect();//접속하기~~ ( 하지만 멤버변수가 현재 .system으로 되어 있으므로 멤버변수를 초이스 값으로 교체
 						//해야 한다) 
 		getTableList(); //바로 이 시점에 로그인하자마자, 이 사람의 테이블 정보를 보여주는게 좋을거 같아요
+		getSeqList();
 		
 		System.out.println("보유한 테이블 "+tableList.size());//잘 나오는데 뭔가 갱신에 문제가 있어요 
 		//오늘여기까지 할테니, 저녁때 복습하시면서 한번 체크해보세요~~~
