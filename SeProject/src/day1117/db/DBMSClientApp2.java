@@ -430,7 +430,11 @@ public class DBMSClientApp2 extends JFrame{
 	public void getColumnType(ResultSetMetaData meta) {
 		try {
 			int total = meta.getColumnCount(); //총 컬럼 수
+			
+			//멤버변수로 선언된 벡터에 버튼을 누를때마다 계속 누적이 되므로, 
+			//아래의 for문이 수행되기 전에, 먼저 비워놓고 채우자!!
 			columnList.removeAll(columnList);
+			
 			for(int i=1;i<=total;i++) {
 				System.out.println("컬럼명"+meta.getColumnName(i)+"("+meta.getColumnTypeName(i)+")");
 				Vector vec = new Vector();
