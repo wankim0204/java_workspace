@@ -41,13 +41,15 @@ public class DBMSClientApp3 extends JFrame{
 	JPanel p_center;//그리드가 적용될 센터패널
 	JPanel p_upper; //테이블과 시퀀스를 포함할 패널(그리드 레이아웃 예정)
 	JPanel p_middle; //SQL편집기가 위치할 미들패널(BorderLayout)
+	JPanel p_footer;//하단의 그리드(1,2)가 적용될 패널  
 	JTextArea area;//쿼리 편집기
 	JButton bt_execute;//쿼리문 실행버튼
 	JTable t_tables;//유저의 테이블 정보를 출력할 JTable
 	JTable t_seq;//유저의 시퀀스 정보를 출력할 JTable
 	JTable t_record;//유저가 선택한 테이블의 레코드를 출력할 JTable
+	JTable t_column; //유저가 선택한 테이블의 구조를 출력할 JTable
 	
-	JScrollPane s1,s2,s3,s4;//스크롤  4개 준비
+	JScrollPane s1,s2,s3,s4,s5;//스크롤  4개 준비
 	
 	String driver="oracle.jdbc.driver.OracleDriver";
 	String url="jdbc:oracle:thin:@localhost:1521:XE";
@@ -67,6 +69,10 @@ public class DBMSClientApp3 extends JFrame{
 	Vector seqList = new Vector();
 	Vector<String> seqColumn = new Vector<String>();
 	
+	//테이블 컬럼정보에 필요한 벡터들
+	Vector columnList=new Vector();
+	Vector<String> columType = new Vector<String>();
+	
 	
 	//TableModel 보유 
 	MyTableModel model;
@@ -81,6 +87,8 @@ public class DBMSClientApp3 extends JFrame{
 		p_center= new JPanel();
 		p_upper = new JPanel();
 		p_middle = new JPanel();
+		p_footer = new JPanel();
+		
 		area = new JTextArea();
 		bt_execute = new JButton("SQL문 실행");
 		
@@ -88,6 +96,7 @@ public class DBMSClientApp3 extends JFrame{
 		p_center.setLayout(new GridLayout(3, 1)); //3층에 1호수
 		p_upper.setLayout(new GridLayout(1, 2)); //1층에 2호수
 		p_middle.setLayout(new BorderLayout());
+		p_footer.setLayout(new GridLayout(1, 2)); //1층에 2호수
 		
 
 		//컬럼정보 초기화 하기(이러면 안되겠네요,,,생성자로 원상복귀) 
@@ -101,10 +110,15 @@ public class DBMSClientApp3 extends JFrame{
 		seqColumn.add("sequence_name");
 		seqColumn.add("last_number");
 		t_seq = new JTable(seqList, seqColumn);
+		
+		columType.add("컬럼명");
+		columType.add("데이터타입");
+		t_column = new JTable(columnList, columType);
+		
 		s1 = new JScrollPane(t_tables);
 		s2 = new JScrollPane(t_seq);
 		s3=new JScrollPane(area); 
-		
+		s5= new JScrollPane(t_column);
 		
 		//선택한 테이블의 레코드 보여줄 JTable 생성 
 		t_record = new JTable(null); //MyTableModel을 대입할 예정
@@ -127,9 +141,13 @@ public class DBMSClientApp3 extends JFrame{
 		p_upper.add(s2);
 		p_middle.add(s3);
 		p_middle.add(bt_execute, BorderLayout.SOUTH);
+		p_footer.add(s4);
+		p_footer.add(s5);
+		
 		p_center.add(p_upper);//그리드의 1층
 		p_center.add(p_middle);//그리드의 2층 
-		p_center.add(s4);//그리드의 3층
+		p_center.add(p_footer);//그리드의 3층
+	
 		
 		add(p_west, BorderLayout.WEST);
 		add(p_center);
@@ -168,6 +186,10 @@ public class DBMSClientApp3 extends JFrame{
 				t_record.updateUI();//jtable 갱신
 				//System.out.println("모델의 컬럼 카운트는 "+model.getColumnCount()+"table 의 컬럼카운트"+t_record.getColumnCount());
 			}
+		});
+		
+		bt_execute.addActionListener((e)->{
+			select(null); // 테이블명을 넘기지 않음
 		});
 		
 		setLocationRelativeTo(null);
@@ -382,6 +404,8 @@ public class DBMSClientApp3 extends JFrame{
 			model = new MyTableModel(record,  column);
 			t_record.setModel(model);//테이블에 모델을 생성자가 아닌, 메서드로 적용하자!!
 			
+			getColumnType(meta); //메타 전달
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -400,10 +424,25 @@ public class DBMSClientApp3 extends JFrame{
 				}
 			}			
 		}
-		
-		
-		
 	}
+	
+	//유저가 선택한 테이블의 구조 정보 가져오기 
+	public void getColumnType(ResultSetMetaData meta) {
+		try {
+			int total = meta.getColumnCount(); //총 컬럼 수
+			for(int i=1;i<=total;i++) {
+				System.out.println("컬럼명"+meta.getColumnName(i)+"("+meta.getColumnTypeName(i)+")");
+				Vector vec = new Vector();
+				vec.add(meta.getColumnName(i));
+				vec.add(meta.getColumnTypeName(i));
+				columnList.add(vec);
+			}
+			t_column.updateUI();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	//로그인 
 	public void login() {
