@@ -32,7 +32,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 
-public class DBMSClientApp2 extends JFrame{
+public class DBMSClientApp3 extends JFrame{
 	JPanel p_west; //서쪽 영역 패널 
 	Choice ch_users; //유저명이 출력될 초이스 컴포넌트 
 	JPasswordField t_pass;//비밀번호 텍스트 필드 
@@ -71,7 +71,7 @@ public class DBMSClientApp2 extends JFrame{
 	//TableModel 보유 
 	MyTableModel model;
 	
-	public DBMSClientApp2() {
+	public DBMSClientApp3() {
 		//생성
 		p_west = new JPanel();
 		ch_users = new Choice();
@@ -436,7 +436,7 @@ public class DBMSClientApp2 extends JFrame{
 	}
 	
 	public static void main(String[] args) {
-		new DBMSClientApp2();
+		new DBMSClientApp3();
 	}
 
 }
