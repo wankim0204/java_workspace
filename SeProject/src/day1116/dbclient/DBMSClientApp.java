@@ -15,6 +15,8 @@ import java.awt.BorderLayout;
 import java.awt.Choice;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
@@ -39,8 +41,10 @@ public class DBMSClientApp extends JFrame{
 	JButton bt_login; //접속 버튼
 	
 	JPanel p_center;//그리드가 적용될 센터패널
+	JPanel p_upper; //테이블과 시퀀스를 포함할 패널(그리드 레이아웃 예정)
 	JTable t_tables;//유저의 테이블 정보를 출력할 JTable
 	JTable t_seq;//유저의 시퀀스 정보를 출력할 JTable
+	
 	JScrollPane s1,s2;//스크롤  2개 준비
 	
 	String driver="oracle.jdbc.driver.OracleDriver";
@@ -66,7 +70,14 @@ public class DBMSClientApp extends JFrame{
 		bt_login = new JButton("접속");
 		
 		p_center= new JPanel();
-		p_center.setLayout(new GridLayout(2, 1)); //2층에 1호수
+		p_upper = new JPanel();
+		p_center.setLayout(new GridLayout(3, 1)); //3층에 1호수
+		p_upper.setLayout(new GridLayout(1, 2)); //1층에 2호수
+		
+
+		//컬럼정보 초기화 하기(이러면 안되겠네요,,,생성자로 원상복귀) 
+		columnList.add("table_name");
+		columnList.add("tablespace_name");
 		t_tables = new JTable(tableList,columnList); //여기서 초기백터값을 넣어주세요, 이 시점엔 아직  
 																			//db연동을 안한 상태이므로 사이즈가 0이지만, 
 																			//추후 메서드 호출시 벡터의 크기가 변경될것이고, 
@@ -85,13 +96,14 @@ public class DBMSClientApp extends JFrame{
 		p_west.add(ch_users);
 		p_west.add(t_pass);
 		p_west.add(bt_login);
-		p_center.add(s1);
-		p_center.add(s2);
+		p_upper.add(s1);
+		p_upper.add(s2);
+		p_center.add(p_upper);
 		
 		add(p_west, BorderLayout.WEST);
 		add(p_center);
 		
-		setSize(700,350); //700으로 늘려주세요
+		setSize(700,750);
 		setVisible(true);
 		//setDefaultCloseOperation(EXIT_ON_CLOSE); 
 		//프로세스만 종료시켜 버리므로, 오라클, 스트림 닫는 처리를
@@ -108,14 +120,23 @@ public class DBMSClientApp extends JFrame{
 			login(); //선택한 유저로 로그인시도하기!!
 		});
 		
+		//테이블과 리스너 연결 
+		t_tables.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent e) {
+				//선택한 좌표의 테이블명 얻기!!
+				
+				int row = t_tables.getSelectedRow();//선택한  row구하기 
+				int col = t_tables.getSelectedColumn();//선택한 column  구하기
+				
+				System.out.println(t_tables.getValueAt(row, col));
+			}
+		});
+		
 		setLocationRelativeTo(null);
 		
 		connect();//호출!!
 		getUserList(); //유저목록 구해오기
 		
-		//컬럼정보 초기화 하기(이러면 안되겠네요,,,생성자로 원상복귀) 
-		columnList.add("table_name");
-		columnList.add("tablespace_name");
 	}
 	
 	//오라클에 접속하기 
@@ -198,6 +219,10 @@ public class DBMSClientApp extends JFrame{
 			//완성된 이차원백터를 JTable에 반영해야 함, 생성자의 인수로 넣어야 함!! 
 			//컬럼 정보는 어떻게 가져올까요?? 2개밖에 없으니 고정하면 되겠죠?
 			t_tables.updateUI(); //여기서 new 하지 마세요 그냥 updateUI() 합시다
+			//테이블의 레코드와 컬럼갯수 확인 (여전히 0인지 체크) 
+			//현재 테이블이 컬럼을 몇개로 인식하고 있는지 조사
+			System.out.println("컬럼수는 : "+t_tables.getColumnCount());
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -234,6 +259,7 @@ public class DBMSClientApp extends JFrame{
 		
 		System.out.println("보유한 테이블 "+tableList.size());//잘 나오는데 뭔가 갱신에 문제가 있어요 
 		//오늘여기까지 할테니, 저녁때 복습하시면서 한번 체크해보세요~~~
+		t_tables.updateUI();
 	}
 	
 	
