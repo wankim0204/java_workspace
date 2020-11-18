@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -52,7 +53,7 @@ public class Product extends Page{
 		p_west = new JPanel();
 		p_center = new JPanel();
 		tree = new JTree(top);
-		table = new JTable(model = new ProductModel());
+		table = new JTable();
 		s1 = new JScrollPane(tree);
 		s2 = new JScrollPane(table);
 		bt_regist = new JButton("등록하기");
@@ -149,9 +150,35 @@ public class Product extends Page{
 			rs=pstmt.executeQuery();
 			
 			//메타정보를 이용하여 ProductModel의 column ArrayList 를 채우자
+			ResultSetMetaData meta=rs.getMetaData();
+			ArrayList<String> columnNames = new ArrayList<String>();
+			
+			for(int i=1;i<=meta.getColumnCount();i++) {
+				String colName = meta.getColumnName(i); //컬럼명 추출
+				columnNames.add(colName);
+			}
 			
 			//rs의 레코드를 ProductModel 의 record ArrayList에 채우자
+			ArrayList<ProductVO> productList = new ArrayList<ProductVO>();
 			
+			while(rs.next()) {
+				ProductVO vo = new ProductVO();//비어있는 vo를생성해서 rs의 값들을 채워넣기 위해!!
+				
+				vo.setProduct_id(rs.getInt("product_id"));
+				vo.setSubcategory_id(rs.getInt("subcategory_id"));
+				vo.setProduct_name(rs.getString("product_name"));
+				vo.setBrand(rs.getString("brand"));
+				vo.setPrice(rs.getInt("price"));
+				vo.setFilename(rs.getString("filename"));
+				vo.setDetail(rs.getString("detail"));
+				productList.add(vo);//방금 생성하고 하나의 레코드가 채워진 vo를 ArrayList 에 추가하자!!
+			}
+			
+			model = new ProductModel();
+			model.column=columnNames;//컬럼정보 대입
+			model.record = productList;//레코드정보 대입
+			table.setModel(model);//테이블에 방금 생성한 모델 적용!!
+			table.updateUI();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
