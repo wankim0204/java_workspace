@@ -186,6 +186,8 @@ public class Product extends Page{
 			table.updateUI();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			getAdminMain().getDbManager().close(pstmt, rs);
 		}
 		
 	}
