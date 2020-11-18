@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.swingmall.admin.AdminMain;
@@ -28,6 +30,7 @@ public class Product extends Page{
 	
 	ArrayList<String> topList;//최상위 카테고리 이름을 담게될 리스트 top,down,accessay,shoes
 	ArrayList<ArrayList> subList=new ArrayList<ArrayList>();//모든 하위 카테고리
+	ProductModel model;
 	
 	public Product(AdminMain adminMain) {
 		super(adminMain);
@@ -49,7 +52,7 @@ public class Product extends Page{
 		p_west = new JPanel();
 		p_center = new JPanel();
 		tree = new JTree(top);
-		table = new JTable(10,7);
+		table = new JTable(model = new ProductModel());
 		s1 = new JScrollPane(tree);
 		s2 = new JScrollPane(table);
 		bt_regist = new JButton("등록하기");
@@ -57,7 +60,7 @@ public class Product extends Page{
 		//스타일 적용 
 		s1.setPreferredSize(new Dimension(200, AdminMain.HEIGHT-100));
 		p_west.setBackground(Color.WHITE);
-		s2.setPreferredSize(new Dimension(AdminMain.WIDTH-200, AdminMain.HEIGHT-200));
+		s2.setPreferredSize(new Dimension(AdminMain.WIDTH-300, AdminMain.HEIGHT-200));
 		
 		//조립
 		setLayout(new BorderLayout());
@@ -69,6 +72,10 @@ public class Product extends Page{
 		add(p_west, BorderLayout.WEST);
 		add(p_center);
 		
+		//tree는 이벤트가 별도로 지원 ..
+		tree.addTreeSelectionListener((e)->{
+			System.out.println("나 선택했어?");
+		});
 	}
 	
 	//상위 카테고리 가져오기 
@@ -124,6 +131,31 @@ public class Product extends Page{
 			parent.add(new DefaultMutableTreeNode(childName.get(i)));
 		}
 		return parent;
+	}
+	
+	//상품 가져오기
+	public void getProductList(String name) {
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql=null;
+		
+		if(name==null) {//name매개변수가 null이면 모든 상품가져오기
+			sql="select * from product";
+		}else {//name 값이 넘어오면 조건 쿼리 수행
+			sql="select * from product where ~~~~";
+		}
+		try {
+			pstmt=getAdminMain().getCon().prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			
+			//메타정보를 이용하여 ProductModel의 column ArrayList 를 채우자
+			
+			//rs의 레코드를 ProductModel 의 record ArrayList에 채우자
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 }

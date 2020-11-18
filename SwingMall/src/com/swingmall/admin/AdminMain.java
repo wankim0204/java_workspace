@@ -107,6 +107,7 @@ public class AdminMain extends JFrame{
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				dbManager.disConnect(con);
+				System.exit(0);//프로세스도 종료 , 쉬는 시간 마치고 이거 꼭 넣어주세요 ㅜㅜ 
 			}
 		});
 		
