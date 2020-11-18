@@ -73,10 +73,15 @@ public class Product extends Page{
 		add(p_west, BorderLayout.WEST);
 		add(p_center);
 		
+		
+		getProductList(null);
+		
 		//tree는 이벤트가 별도로 지원 ..
 		tree.addTreeSelectionListener((e)->{
-			System.out.println("나 선택했어?");
+			DefaultMutableTreeNode selectedNode=(DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+			getProductList(selectedNode.toString());//모든 상품 가져오기
 		});
+		
 	}
 	
 	//상위 카테고리 가져오기 
@@ -143,7 +148,7 @@ public class Product extends Page{
 		if(name==null) {//name매개변수가 null이면 모든 상품가져오기
 			sql="select * from product";
 		}else {//name 값이 넘어오면 조건 쿼리 수행
-			sql="select * from product where ~~~~";
+			sql="select * from product where subcategory_id=(select subcategory_id from subcategory where name='"+name+"')";
 		}
 		try {
 			pstmt=getAdminMain().getCon().prepareStatement(sql);
