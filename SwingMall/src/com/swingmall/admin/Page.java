@@ -11,7 +11,11 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 
 public class Page extends JPanel{
-	AdminMain adminMain;
+	private AdminMain adminMain;
+	
+	public AdminMain getAdminMain() {
+		return adminMain;
+	}
 	
 	public Page(AdminMain adminMain) {
 		this.adminMain=adminMain;

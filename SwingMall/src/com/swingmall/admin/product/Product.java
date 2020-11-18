@@ -3,6 +3,9 @@ package com.swingmall.admin.product;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -23,13 +26,29 @@ public class Product extends Page{
 	JScrollPane s1,s2;
 	JButton bt_regist;
 	
+	ArrayList<String> topList;//최상위 카테고리 이름을 담게될 리스트 top,down,accessay,shoes
+	ArrayList<ArrayList> subList=new ArrayList<ArrayList>();//모든 하위 카테고리
+	
 	public Product(AdminMain adminMain) {
 		super(adminMain);
+		
+		//카테고리 가져오기
+		getTopList();//상위카테고리 가져오기, 멤버변수인 topList에 최상위 카테고리가 채워진다!!
+		for(String name : topList) {
+			getSubList(name);
+		}
+		
+		//노드만들기
+		//'상품목록' 이라는 제목의 최상위노드 생성하기 
+		DefaultMutableTreeNode top = new DefaultMutableTreeNode("상품목록");
+		for(int i=0;i<topList.size();i++) {
+			top.add(getCreatedNode(topList.get(i), subList.get(i)));
+		}
 		
 		//생성
 		p_west = new JPanel();
 		p_center = new JPanel();
-		tree = new JTree();//노드를 넣을 예정임..
+		tree = new JTree(top);
 		table = new JTable(10,7);
 		s1 = new JScrollPane(tree);
 		s2 = new JScrollPane(table);
@@ -49,15 +68,50 @@ public class Product extends Page{
 		
 		add(p_west, BorderLayout.WEST);
 		add(p_center);
+		
 	}
+	
 	//상위 카테고리 가져오기 
 	public void getTopList() {
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
 		String sql="select * from topcategory";
+		try {
+			pstmt=getAdminMain().getCon().prepareStatement(sql); //쿼리준비
+			rs=pstmt.executeQuery();//쿼리수행
+			//배열은 유연하지 못하므로, ArrayList 에 담자 
+			topList = new ArrayList();
+			while(rs.next()) {
+				topList.add(rs.getString("name"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			getAdminMain().getDbManager().close(pstmt, rs);
+		}
 	}
 	
 	//하위 카테고리 가져오기
 	public void getSubList(String name) {
-		String sql="select * from subcategory where topcategory_id=( select topcategory_id from topcategory where name=?)";
+		PreparedStatement pstmt = null;
+		ResultSet rs=null;
+		String sql="select * from subcategory where topcategory_id=(";
+		sql+=" select topcategory_id from topcategory where name='"+name+"')";
+		try {
+			pstmt=getAdminMain().getCon().prepareStatement(sql);//쿼리준비
+			rs = pstmt.executeQuery();
+			
+			ArrayList list = new ArrayList();//상위 카테고리에 등록된 하위카테고리
+			while(rs.next()) {
+				list.add(rs.getString("name"));
+			}
+			subList.add(list);//모두 담겨지면, 이차원 리스트에 추가해놓자!!
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			getAdminMain().getDbManager().close(pstmt, rs);
+		}
 	}
 	
 	//트리노트 생성하기 

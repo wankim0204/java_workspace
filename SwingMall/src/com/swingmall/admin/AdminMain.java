@@ -43,9 +43,8 @@ public class AdminMain extends JFrame{
 	Page[] page =new Page[5];
 	
 	JLabel la_footer;//윈도우 하단의 카피라이트 영역
-	DBManager dbManager;
-	Connection con;
-	
+	private DBManager dbManager;
+	private Connection con;
 	
 	public AdminMain() {
 		dbManager = new DBManager();
@@ -140,6 +139,15 @@ public class AdminMain extends JFrame{
 				page[i].setVisible(false); //않보이게할 페이지
 			}
 		}
+	}
+	
+	
+	//다른 클래스에서 참조할 수 있도록 getter제공
+	public DBManager getDbManager() {
+		return dbManager;
+	}
+	public Connection getCon() {
+		return con;
 	}
 	
 	public static void main(String[] args) {
