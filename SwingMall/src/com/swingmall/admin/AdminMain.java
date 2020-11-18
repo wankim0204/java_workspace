@@ -91,7 +91,7 @@ public class AdminMain extends JFrame{
 		for(int i=0;i<page.length;i++) {
 			p_content.add(page[i]);
 		}
-		showPage(AdminMain.PRODUCT);//처음에 나와야하는 페이지 설정
+		showPage(AdminMain.HOME);//처음에 나와야하는 페이지 설정
 		
 		user_container.add(p_navi, BorderLayout.NORTH);
 		user_container.add(p_content);//센터에 페이지 부착

@@ -3,12 +3,14 @@ package com.swingmall.admin.product;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.swingmall.admin.AdminMain;
 import com.swingmall.admin.Page;
@@ -47,6 +49,39 @@ public class Product extends Page{
 		
 		add(p_west, BorderLayout.WEST);
 		add(p_center);
-		
 	}
+	//상위 카테고리 가져오기 
+	public void getTopList() {
+		String sql="select * from topcategory";
+	}
+	
+	//하위 카테고리 가져오기
+	public void getSubList(String name) {
+		String sql="select * from subcategory where topcategory_id=( select topcategory_id from topcategory where name=?)";
+	}
+	
+	//트리노트 생성하기 
+	public DefaultMutableTreeNode getCreatedNode(String parentName, ArrayList childName) {
+		//부모노드 생성하기 
+		DefaultMutableTreeNode parent = new DefaultMutableTreeNode(parentName);
+		
+		//넘겨받은 매개변수인 ArrayList 만큼 반복하여 부모노드에 자식노드 부착!!
+		for(int i=0;i<childName.size();i++) {
+			parent.add(new DefaultMutableTreeNode(childName.get(i)));
+		}
+		return parent;
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
