@@ -14,6 +14,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
+import com.swingmall.admin.board.Board;
+import com.swingmall.admin.member.Member;
+import com.swingmall.admin.order.Order;
+import com.swingmall.admin.product.Product;
 import com.swingmall.util.db.DBManager;
 
 public class AdminMain extends JFrame{
@@ -59,6 +64,8 @@ public class AdminMain extends JFrame{
 		//메인 네비게이션 생성 
 		for(int i=0;i<navi.length;i++) {
 			navi[i] = new JButton(navi_title[i]);
+			navi[i].setBackground(Color.BLACK);
+			navi[i].setForeground(Color.WHITE);
 			p_navi.add(navi[i]);//패널에 네비게이션 부착
 		}
 		
@@ -79,7 +86,7 @@ public class AdminMain extends JFrame{
 		user_container.setLayout(new BorderLayout());
 		user_container.add(p_navi, BorderLayout.NORTH);
 		
-		user_container.add(page[AdminMain.HOME]);//센터에 페이지 부착
+		user_container.add(page[AdminMain.PRODUCT]);//센터에 페이지 부착
 		
 		this.add(user_container);
 		this.add(la_footer, BorderLayout.SOUTH);
