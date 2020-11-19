@@ -20,6 +20,7 @@ import com.swingmall.board.QnA;
 import com.swingmall.home.Home;
 import com.swingmall.member.Login;
 import com.swingmall.member.MyPage;
+import com.swingmall.member.RegistForm;
 import com.swingmall.product.Product;
 import com.swingmall.product.ProductDetail;
 import com.swingmall.util.db.DBManager;
@@ -48,7 +49,7 @@ public class ShopMain extends JFrame{
 	JButton[] navi=new JButton[navi_title.length];//[][][][][] 배열생성
 	
 	//페이지 구성 
-	Page[] page =new Page[6];//최상위페이지들
+	Page[] page =new Page[7];//최상위페이지들
 	
 	JLabel la_footer;//윈도우 하단의 카피라이트 영역
 	private DBManager dbManager;
@@ -84,6 +85,7 @@ public class ShopMain extends JFrame{
 		page[3] = new MyPage(this);
 		page[4] = new Login(this);
 		page[5] = new ProductDetail(this);
+		page[6] = new RegistForm(this); //회원가입 폼
 	
 		//스타일적용
 		user_container.setPreferredSize(new Dimension(WIDTH, HEIGHT-50));

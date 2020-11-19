@@ -24,11 +24,11 @@ public class RegistForm extends Page{
 		super(shopMain);
 		p_content = new JPanel();
 		
-		t_mid = new JTextField();
+		t_mid = new JTextField("아이디 입력");
 		t_pass = new JPasswordField();
-		t_name = new JTextField();
-		t_phone = new JTextField();
-		t_email = new JTextField();
+		t_name = new JTextField("이름 입력");
+		t_phone = new JTextField("연락처 입력");
+		t_email = new JTextField("이메일 입력");
 		bt_regist = new JButton("회원가입");
 		
 		//스타일 
@@ -47,6 +47,7 @@ public class RegistForm extends Page{
 		p_content.add(t_name);
 		p_content.add(t_phone);
 		p_content.add(t_email);
+		p_content.add(bt_regist);
 		
 		add(p_content);
 		

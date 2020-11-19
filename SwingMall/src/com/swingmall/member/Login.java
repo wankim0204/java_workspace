@@ -39,6 +39,11 @@ public class Login extends Page{
 		p_content.add(bt_regist);
 		
 		add(p_content);
+		
+		//회원가입 버튼과 리스너 연결 
+		bt_regist.addActionListener((e)->{
+			getShopMain().showPage(ShopMain.MEMBER_REGIST);
+		});
 	}
 }
 
