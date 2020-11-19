@@ -74,12 +74,17 @@ public class Product extends Page{
 		add(p_center);
 		
 		
-		getProductList(null);
+		getProductList(null);//모든 상품 가져오기
 		
 		//tree는 이벤트가 별도로 지원 ..
 		tree.addTreeSelectionListener((e)->{
 			DefaultMutableTreeNode selectedNode=(DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
-			getProductList(selectedNode.toString());//모든 상품 가져오기
+			
+			if(selectedNode.toString().equals("상품목록")) {
+				getProductList(null);//모든 상품 가져오기
+			}else {
+				getProductList(selectedNode.toString());//모든 상품 가져오기				
+			}
 		});
 		
 	}
