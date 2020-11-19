@@ -108,13 +108,19 @@ public class RegistForm extends JPanel{
 		
 		ch_top.addItemListener((e)->{
 			System.out.println("나 바꿨어?");
-			
+			getSubCategory(ch_top.getSelectedIndex());
 		});
 	}
 	
 	//지금 유저가 선택한 최상위 카테고리에 소속된 하위카테고리만 가져오기!!
-	public ArrayList getSubCategory(int index) {
-		return product.subList.get(index);
+	public void getSubCategory(int index) {
+		ArrayList<String> list=product.subList.get(index);
+		
+		ch_sub.removeAll();//채워넣기 전에, 기존 아이템들은 삭제...
+		
+		for(String item: list) {
+			ch_sub.add(item);
+		}
 	}
 	
 	public void regist() {
