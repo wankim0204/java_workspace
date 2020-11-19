@@ -38,7 +38,10 @@ public class Home extends Page{
 				public void mouseReleased(MouseEvent e) {
 					//System.out.println("나 선택했어?");
 					ProductDetail productDetail=(ProductDetail)getShopMain().getPage()[ShopMain.PRODUCT_DETAIL];
-					productDetail.init(item.vo);//아이템이 보유한 ProductVO 전달
+					productDetail.init(item.vo, item.img );//아이템이 보유한 ProductVO 전달
+					productDetail.p_can.repaint();
+					productDetail.updateUI();
+					
 					getShopMain().showPage(ShopMain.PRODUCT_DETAIL);//보여주고 싶은 페이지
 				}
 			});

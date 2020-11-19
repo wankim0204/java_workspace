@@ -16,7 +16,7 @@ import com.swingmall.main.ShopMain;
 
 public class ProductDetail extends Page{
 	public JPanel p_content; //상세내용을 담게될 패널 
-	JPanel p_can; //큰 상품이미지 그려질 패널
+	public JPanel p_can; //큰 상품이미지 그려질 패널
 	JPanel p_option; //옵션 선택 영역
 	JLabel la_brand; //브랜드
 	JLabel la_product_name; //상품명 라벨 
@@ -93,11 +93,12 @@ public class ProductDetail extends Page{
 	}
 	
 	//상세페이지가 보여질때 데이터를 채워넣는 메서드 (생성자에서 하면 디자인 처리에 타이밍적인 제한이 많다)
-	public void init(ProductVO vo) {
+	public void init(ProductVO vo, Image img) {
 		la_brand.setText(vo.getBrand());//브랜드 채워넣기 
 		la_product_name.setText(vo.getProduct_name());
 		la_price.setText(Integer.toString(vo.getPrice()));
-		p_can.repaint();
+		this.img=img;
+		this.img= this.img.getScaledInstance(500, 550, Image.SCALE_SMOOTH);
 	}
 	
 	public ProductVO getVo() {

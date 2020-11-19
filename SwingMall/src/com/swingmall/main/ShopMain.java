@@ -35,8 +35,8 @@ public class ShopMain extends JFrame{
 	public static final int QNA=2;
 	public static final int MYPAGE=3;
 	public static final int LOGIN=4;
-	//하위페이지 
 	public static final int PRODUCT_DETAIL=5;
+	public static final int MEMBER_REGIST=6;
 	
 		
 	JPanel user_container;//관리자,사용자 화면을 구분지을수 있는 컨테이너
