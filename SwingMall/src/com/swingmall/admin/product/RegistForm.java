@@ -107,6 +107,8 @@ public class RegistForm extends JPanel{
 				JOptionPane.showMessageDialog(RegistForm.this, "등록실패");
 			}else {
 				JOptionPane.showMessageDialog(RegistForm.this, "등록성공");
+				product.getProductList(null);//목록을 갱신시키기 위한 메서드 호출 
+				product.updateUI();
 			}
 		});
 		
