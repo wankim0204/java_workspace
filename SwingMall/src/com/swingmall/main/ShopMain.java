@@ -2,6 +2,7 @@ package com.swingmall.main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.WindowAdapter;
@@ -20,17 +21,22 @@ import com.swingmall.home.Home;
 import com.swingmall.member.Login;
 import com.swingmall.member.MyPage;
 import com.swingmall.product.Product;
+import com.swingmall.product.ProductDetail;
 import com.swingmall.util.db.DBManager;
 
 public class ShopMain extends JFrame{
 	//상수 선언
 	public static final int WIDTH=1200;
 	public static final int HEIGHT=900;
+	
+	//최상위 페이지들
 	public static final int HOME=0;
 	public static final int PRODUCT=1;
 	public static final int QNA=2;
 	public static final int MYPAGE=3;
 	public static final int LOGIN=4;
+	//하위페이지 
+	public static final int PRODUCT_DETAIL=5;
 	
 		
 	JPanel user_container;//관리자,사용자 화면을 구분지을수 있는 컨테이너
@@ -42,7 +48,7 @@ public class ShopMain extends JFrame{
 	JButton[] navi=new JButton[navi_title.length];//[][][][][] 배열생성
 	
 	//페이지 구성 
-	Page[] page =new Page[5];
+	Page[] page =new Page[6];//최상위페이지들
 	
 	JLabel la_footer;//윈도우 하단의 카피라이트 영역
 	private DBManager dbManager;
@@ -77,7 +83,8 @@ public class ShopMain extends JFrame{
 		page[2] = new QnA(this);
 		page[3] = new MyPage(this);
 		page[4] = new Login(this);
-		
+		page[5] = new ProductDetail(this);
+	
 		//스타일적용
 		user_container.setPreferredSize(new Dimension(WIDTH, HEIGHT-50));
 		user_container.setBackground(Color.WHITE);
@@ -92,10 +99,13 @@ public class ShopMain extends JFrame{
 		for(int i=0;i<page.length;i++) {
 			p_content.add(page[i]);
 		}
+		
 		user_container.add(p_content);//센터에 페이지 부착
 		
 		this.add(user_container);
 		this.add(la_footer, BorderLayout.SOUTH);
+		
+		showPage(5);
 		
 		setSize(1200,900);
 		setVisible(true);
@@ -138,6 +148,14 @@ public class ShopMain extends JFrame{
 				page[i].setVisible(false); //않보이게할 페이지
 			}
 		}
+	}
+	
+	//보여질 컨텐트와 가려질 컨텐트를 제어하는 메서드 
+	public void addRemoveContent(Component removeObj, Component addObj) {
+		this.remove(removeObj); //제거될 자
+		this.add(addObj);//부착될 자
+		
+		((JPanel)addObj).updateUI();
 	}
 
 	public DBManager getDbManager() {

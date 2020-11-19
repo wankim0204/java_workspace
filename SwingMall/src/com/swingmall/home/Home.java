@@ -1,5 +1,6 @@
 package com.swingmall.home;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -59,9 +60,11 @@ public class Home extends Page{
 	
 	//상품 아이템 카드 생성하기!!
 	public void createItem(ProductVO vo) {
-		ProductItem item = new ProductItem(vo,200,180);
+		ProductItem item = new ProductItem(this, vo,200,180);
 		p_content.add(item);
 	}
+	
+	
 }
 
 
