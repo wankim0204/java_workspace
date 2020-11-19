@@ -62,17 +62,38 @@ public class ProductDetail extends Page{
 		
 		//스타일 적용 
 		p_content.setPreferredSize(new Dimension(ShopMain.WIDTH-100, ShopMain.HEIGHT-200));
-		p_content.setBackground(Color.YELLOW);
 		
+		Dimension d =new Dimension((ShopMain.WIDTH-100)/3,30);
+		
+		la_brand.setPreferredSize(d);
+		la_product_name.setPreferredSize(d);
+		la_price.setPreferredSize(d);
+		bt_buy.setPreferredSize(new Dimension(200, 30));
+		bt_cart.setPreferredSize(new Dimension(200, 30));
+		
+		ch_color.setPreferredSize(new Dimension((ShopMain.WIDTH-100)/3,30));
+		ch_size.setPreferredSize(new Dimension((ShopMain.WIDTH-100)/3,30));
 		
 		//조립
 		p_content.setLayout(new GridLayout(1, 2));
+		
+		//p_content 구성하기
+		p_option.add(la_brand);
+		p_option.add(la_product_name);
+		p_option.add(la_price);
+		p_option.add(ch_color);
+		p_option.add(ch_size);
+		p_option.add(bt_buy);
+		p_option.add(bt_cart);
+		
+		p_content.add(p_can);
+		p_content.add(p_option);
 		
 		add(p_content);
 	}
 	
 	//상세페이지가 보여질때 데이터를 채워넣는 메서드 (생성자에서 하면 디자인 처리에 타이밍적인 제한이 많다)
-	public void init() {
+	public void init(ProductVO vo) {
 		la_brand.setText(vo.getBrand());//브랜드 채워넣기 
 		la_product_name.setText(vo.getProduct_name());
 		la_price.setText(Integer.toString(vo.getPrice()));

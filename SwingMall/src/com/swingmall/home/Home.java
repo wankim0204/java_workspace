@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import com.swingmall.admin.product.ProductVO;
 import com.swingmall.main.Page;
 import com.swingmall.main.ShopMain;
+import com.swingmall.product.ProductDetail;
 
 public class Home extends Page{
 	JPanel p_content;//상품 리스트를 담게될 패널, 추후 상세보기로 전환시 이 패널 자체를 들어내버릴꺼임..
@@ -36,6 +37,8 @@ public class Home extends Page{
 			item.addMouseListener(new MouseAdapter() {
 				public void mouseReleased(MouseEvent e) {
 					//System.out.println("나 선택했어?");
+					ProductDetail productDetail=(ProductDetail)getShopMain().getPage()[ShopMain.PRODUCT_DETAIL];
+					productDetail.init(item.vo);//아이템이 보유한 ProductVO 전달
 					getShopMain().showPage(ShopMain.PRODUCT_DETAIL);//보여주고 싶은 페이지
 				}
 			});

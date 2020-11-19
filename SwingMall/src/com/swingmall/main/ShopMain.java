@@ -165,6 +165,10 @@ public class ShopMain extends JFrame{
 		return con;
 	}
 	
+	public Page[] getPage() {
+		return page;
+	}
+	
 	public static void main(String[] args) {
 		new ShopMain();
 
