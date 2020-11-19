@@ -32,6 +32,7 @@ public class Product extends Page{
 	ArrayList<String> topList;//최상위 카테고리 이름을 담게될 리스트 top,down,accessay,shoes
 	ArrayList<ArrayList> subList=new ArrayList<ArrayList>();//모든 하위 카테고리
 	ProductModel model;
+	RegistForm registForm;
 	
 	public Product(AdminMain adminMain) {
 		super(adminMain);
@@ -57,6 +58,7 @@ public class Product extends Page{
 		s1 = new JScrollPane(tree);
 		s2 = new JScrollPane(table);
 		bt_regist = new JButton("등록하기");
+		registForm = new RegistForm();
 		
 		//스타일 적용 
 		s1.setPreferredSize(new Dimension(200, AdminMain.HEIGHT-100));
@@ -71,8 +73,10 @@ public class Product extends Page{
 		p_center.add(bt_regist);//센터패널에 버튼부착
 		
 		add(p_west, BorderLayout.WEST);
-		add(p_center);
+		//add(p_center);
+		add(registForm);
 		
+		//등록폼 생성 
 		
 		getProductList(null);//모든 상품 가져오기
 		

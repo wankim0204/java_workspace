@@ -11,6 +11,7 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -29,6 +30,7 @@ public class RegistForm extends JPanel{
 	JTextField t_price;//가격
 	JTextField t_filename;//이미지
 	JTextArea t_detail;//상세설명
+	JScrollPane s1; //상세설명에 부착할 스크롤
 	JButton bt_regist;
 	
 	
@@ -44,11 +46,14 @@ public class RegistForm extends JPanel{
 		t_price = new JTextField();
 		t_filename = new JTextField();
 		t_detail = new JTextArea();
+		s1 = new JScrollPane(t_detail);
 		bt_regist = new JButton("등록");
 		
 		//스타일 적용 
 		p_container.setBackground(Color.WHITE);
-		p_container.setPreferredSize(new Dimension(AdminMain.WIDTH-400, AdminMain.HEIGHT-300));
+		p_container.setPreferredSize(new Dimension(AdminMain.WIDTH-300, AdminMain.HEIGHT-500));
+		bt_regist.setPreferredSize(new Dimension(200, 30));
+		
 		//조립
 		p_container.setLayout(new GridLayout(7,2));
 		p_container.add(la_title[0]);
@@ -64,7 +69,7 @@ public class RegistForm extends JPanel{
 		p_container.add(la_title[5]);
 		p_container.add(t_filename);
 		p_container.add(la_title[6]);
-		p_container.add(t_detail);
+		p_container.add(s1);
 		
 		this.add(p_container);//현재 패널에 폼컨테이너 부착
 		this.add(bt_regist);//현재 패널에 버튼 부착
