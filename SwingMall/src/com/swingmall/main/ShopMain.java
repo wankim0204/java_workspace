@@ -45,8 +45,8 @@ public class ShopMain extends JFrame{
 	Page[] page =new Page[5];
 	
 	JLabel la_footer;//윈도우 하단의 카피라이트 영역
-	DBManager dbManager;
-	Connection con;
+	private DBManager dbManager;
+	private Connection con;
 	
 	
 	public ShopMain() {
@@ -140,6 +140,14 @@ public class ShopMain extends JFrame{
 		}
 	}
 
+	public DBManager getDbManager() {
+		return dbManager;
+	}
+	
+	public Connection getCon() {
+		return con;
+	}
+	
 	public static void main(String[] args) {
 		new ShopMain();
 

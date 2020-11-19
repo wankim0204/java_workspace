@@ -11,18 +11,20 @@ import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.swingmall.admin.product.ProductVO;
+
 public class ProductItem extends JPanel{
 	JPanel p_can;
 	JLabel la_brand;
 	JLabel la_product_name;
 	JLabel la_price;
 	Image img;
-	String path;
+	ProductVO vo;
 	
-	public ProductItem(String path, int width, int height) {
-		this.path=path;
+	public ProductItem(ProductVO vo, int width, int height) {
+		this.vo=vo;
 		try {
-			URL url = new URL(path);
+			URL url = new URL(vo.getFilename());
 			img = ImageIO.read(url);//원본크기의 이미지가 오므로, 크기 조절이 필요하다 
 			img=img.getScaledInstance(width, height/2, Image.SCALE_SMOOTH);
 		} catch (MalformedURLException e) {
@@ -38,9 +40,9 @@ public class ProductItem extends JPanel{
 				g.drawImage(img, 0, 0, p_can);
 			}
 		};
-		la_brand = new JLabel("지오다노");
-		la_product_name = new JLabel("노란셔츠");
-		la_price = new JLabel("150,000");
+		la_brand = new JLabel(vo.getBrand());
+		la_product_name = new JLabel(vo.getProduct_name());
+		la_price = new JLabel(Integer.toString(vo.getPrice()));
 		
 		//스타일적용
 		setPreferredSize(new Dimension(width, height));
