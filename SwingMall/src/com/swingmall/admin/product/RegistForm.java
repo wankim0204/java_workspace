@@ -6,10 +6,14 @@ package com.swingmall.admin.product;
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -98,7 +102,12 @@ public class RegistForm extends JPanel{
 		this.add(bt_list);//현재 패널에 버튼 부착
 		
 		bt_regist.addActionListener((e)->{
-			regist();
+			
+			if(regist()==0) {
+				JOptionPane.showMessageDialog(RegistForm.this, "등록실패");
+			}else {
+				JOptionPane.showMessageDialog(RegistForm.this, "등록성공");
+			}
 		});
 		
 		//목록으로 돌아가기
@@ -123,8 +132,50 @@ public class RegistForm extends JPanel{
 		}
 	}
 	
-	public void regist() {
+	//유저가 선택한 아이템으로부터 subcategory의 pk 를 가져오기
+	public int getSubId(String name) {
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		int subcategory_id=0;
 		
+		String sql="select * from subcategory where name=?";
+		try {
+			pstmt=product.getAdminMain().getCon().prepareStatement(sql);//쿼리준비
+			pstmt.setString(1, name);//매개변수로 전달된 아이템을 , 바인드변수에 대입
+			rs=pstmt.executeQuery();
+			if(rs.next()) {//레코드가 존재한다면
+				subcategory_id = rs.getInt("subcategory_id");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			product.getAdminMain().getDbManager().close(pstmt, rs);
+		}
+		return subcategory_id;
+	} 
+	
+	public int regist() {
+		PreparedStatement pstmt=null;
+		int result=0;//DML수행이 성공했는지 여부를 알수있는 변수
+		
+		String sql="insert into product(product_id,subcategory_id,product_name";  
+		sql+=",brand,price,filename,detail) values(seq_product.nextval,?,?,?,?,?,?)";
+		
+		try {
+			pstmt=product.getAdminMain().getCon().prepareStatement(sql);//쿼리준비
+			pstmt.setInt(1, getSubId(ch_sub.getSelectedItem()));//선택한 아이템의  pk를 구하여 바인드 변수에 대입
+			pstmt.setString(2, t_product_name.getText());//상품명 
+			pstmt.setString(3, t_brand.getText());//브랜드
+			pstmt.setInt(4, Integer.parseInt(t_price.getText()));//가격 
+			pstmt.setString(5, t_filename.getText());// 파일 URL
+			pstmt.setString(6, t_detail.getText());
+			result=pstmt.executeUpdate();//DML
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			product.getAdminMain().getDbManager().close(pstmt);
+		}
+		return result;		
 	}
 }
 
