@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import com.swingmall.admin.AdminMain;
 
@@ -37,7 +38,7 @@ public class RegistForm extends JPanel{
 	public RegistForm() {
 		p_container = new JPanel();
 		for(int i=0;i<title.length;i++) {
-			la_title[i] = new JLabel(title[i]);
+			la_title[i] = new JLabel(title[i], SwingConstants.RIGHT);
 		}
 		ch_top = new Choice();
 		ch_sub = new Choice();
@@ -50,12 +51,23 @@ public class RegistForm extends JPanel{
 		bt_regist = new JButton("등록");
 		
 		//스타일 적용 
+		Dimension d = new Dimension(320,25);
+		
 		p_container.setBackground(Color.WHITE);
-		p_container.setPreferredSize(new Dimension(AdminMain.WIDTH-300, AdminMain.HEIGHT-500));
-		bt_regist.setPreferredSize(new Dimension(200, 30));
+		p_container.setPreferredSize(new Dimension(AdminMain.WIDTH-500, AdminMain.HEIGHT-400));
+		for(int i=0;i<title.length;i++) {
+			la_title[i].setPreferredSize(d);
+		}
+		ch_top.setPreferredSize(d);
+		ch_sub.setPreferredSize(d);
+		t_product_name.setPreferredSize(d);
+		t_brand.setPreferredSize(d);
+		t_price.setPreferredSize(d);
+		t_filename.setPreferredSize(d);
+		t_detail.setPreferredSize(new Dimension(320, 300));
+		bt_regist.setPreferredSize(new Dimension(300, 40));
 		
 		//조립
-		p_container.setLayout(new GridLayout(7,2));
 		p_container.add(la_title[0]);
 		p_container.add(ch_top);
 		p_container.add(la_title[1]);
