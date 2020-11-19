@@ -6,7 +6,7 @@ package com.swingmall.admin.product;
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import com.swingmall.admin.AdminMain;
 
 public class RegistForm extends JPanel{
+	Product product;
 	JPanel p_container;//그리드 적용 예정(7, 2)
 
 	String[] title= {"상위카테고리","하위카테고리","상품명","브랜드","가격","이미지","상세설명"};
@@ -33,9 +34,10 @@ public class RegistForm extends JPanel{
 	JTextArea t_detail;//상세설명
 	JScrollPane s1; //상세설명에 부착할 스크롤
 	JButton bt_regist;
+	JButton bt_list;
 	
-	
-	public RegistForm() {
+	public RegistForm(Product product) {
+		this.product=product;
 		p_container = new JPanel();
 		for(int i=0;i<title.length;i++) {
 			la_title[i] = new JLabel(title[i], SwingConstants.RIGHT);
@@ -49,6 +51,13 @@ public class RegistForm extends JPanel{
 		t_detail = new JTextArea();
 		s1 = new JScrollPane(t_detail);
 		bt_regist = new JButton("등록");
+		bt_list = new JButton("목록");
+		
+		//최상위 카테고리 채우기(DB연동X, 기존데이터 재사용하자)
+		for(String name:product.topList) {
+			ch_top.add(name);
+		}
+		
 		
 		//스타일 적용 
 		Dimension d = new Dimension(320,25);
@@ -66,6 +75,7 @@ public class RegistForm extends JPanel{
 		t_filename.setPreferredSize(d);
 		t_detail.setPreferredSize(new Dimension(320, 300));
 		bt_regist.setPreferredSize(new Dimension(300, 40));
+		bt_list.setPreferredSize(new Dimension(300, 40));
 		
 		//조립
 		p_container.add(la_title[0]);
@@ -85,9 +95,33 @@ public class RegistForm extends JPanel{
 		
 		this.add(p_container);//현재 패널에 폼컨테이너 부착
 		this.add(bt_regist);//현재 패널에 버튼 부착
+		this.add(bt_list);//현재 패널에 버튼 부착
+		
+		bt_regist.addActionListener((e)->{
+			regist();
+		});
+		
+		//목록으로 돌아가기
+		bt_list.addActionListener((e)->{
+			product.addRemoveContent(this, product.p_center);
+		});
+		
+		ch_top.addItemListener((e)->{
+			System.out.println("나 바꿨어?");
+			
+		});
 	}
 	
+	//지금 유저가 선택한 최상위 카테고리에 소속된 하위카테고리만 가져오기!!
+	public ArrayList getSubCategory(int index) {
+		return product.subList.get(index);
+	}
+	
+	public void regist() {
+		
+	}
 }
+
 
 
 

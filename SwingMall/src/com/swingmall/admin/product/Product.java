@@ -2,6 +2,7 @@ package com.swingmall.admin.product;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -58,7 +59,7 @@ public class Product extends Page{
 		s1 = new JScrollPane(tree);
 		s2 = new JScrollPane(table);
 		bt_regist = new JButton("등록하기");
-		registForm = new RegistForm();
+		registForm = new RegistForm(this);
 		
 		//스타일 적용 
 		s1.setPreferredSize(new Dimension(200, AdminMain.HEIGHT-100));
@@ -73,8 +74,8 @@ public class Product extends Page{
 		p_center.add(bt_regist);//센터패널에 버튼부착
 		
 		add(p_west, BorderLayout.WEST);
-		//add(p_center);
-		add(registForm);
+		//현재 패널이 보더레이아웃이므로, 
+		add(p_center);
 		
 		//등록폼 생성 
 		
@@ -91,6 +92,9 @@ public class Product extends Page{
 			}
 		});
 		
+		bt_regist.addActionListener((e)->{
+			addRemoveContent(p_center, registForm);
+		});
 	}
 	
 	//상위 카테고리 가져오기 
@@ -201,6 +205,13 @@ public class Product extends Page{
 		
 	}
 	
+	//보여질 컨텐트와 가려질 컨텐트를 제어하는 메서드 
+	public void addRemoveContent(Component removeObj, Component addObj) {
+		this.remove(removeObj); //제거될 자
+		this.add(addObj);//부착될 자
+		
+		((JPanel)addObj).updateUI();
+	}
 }
 
 
