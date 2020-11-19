@@ -63,16 +63,6 @@ public class ProductItem extends JPanel{
 		add(la_product_name);
 		add(la_price);
 		
-		//현재 패널과 리스너와 연결 
-		this.addMouseListener(new MouseAdapter() {
-			public void mouseReleased(MouseEvent e) {
-				//System.out.println("이 상품 맘에 들어?"); 
-				//상세페이지 (패널) 보여주기
-				//Image image = img.getScaledInstance(350, 400, Image.SCALE_SMOOTH);
-				//productDetail = new ProductDetail(vo, image);
-				//home.getShopMain().addRemoveContent(home.p_content, productDetail.p_content);
-			}
-		});
 	}
 }
 

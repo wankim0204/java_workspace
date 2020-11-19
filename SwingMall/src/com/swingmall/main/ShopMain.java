@@ -104,8 +104,7 @@ public class ShopMain extends JFrame{
 		
 		this.add(user_container);
 		this.add(la_footer, BorderLayout.SOUTH);
-		
-		showPage(5);
+
 		
 		setSize(1200,900);
 		setVisible(true);
