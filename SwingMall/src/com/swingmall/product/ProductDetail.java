@@ -130,6 +130,8 @@ public class ProductDetail extends Page{
 		cartVO.setPrice(vo.getPrice());
 		cartVO.setFilename(vo.getFilename());
 		cartVO.setDetail(vo.getDetail());
+		cartVO.setColor(ch_color.getSelectedItem());//선택한 색상
+		cartVO.setSize(ch_size.getSelectedItem());//선택한 사이즈
 		cartVO.setEa(1);//장바구니에 담을때는 기본이 1개임
 		
 		cartPage.addCart(cartVO);//장바구니에 상품1건 추가하기

@@ -123,6 +123,7 @@ public class ShopMain extends JFrame{
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				dbManager.disConnect(con);
+				System.exit(0);
 			}
 		});
 		

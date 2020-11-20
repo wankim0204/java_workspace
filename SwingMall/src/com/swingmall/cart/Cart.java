@@ -3,6 +3,7 @@
  * */
 package com.swingmall.cart;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class Cart extends Page{
 		
 		bt_container.add(bt_pay);
 		bt_container.add(bt_del);
-		add(bt_container);
+		add(bt_container, BorderLayout.SOUTH);
 	}
 	
 	
@@ -70,7 +71,7 @@ public class Cart extends Page{
 			int key=it.next();//요소를 추출
 			CartVO vo=cartList.get(key);
 			//디자인을 표현하는 CartItem에 CartVO의 정보를 채워넣자!!
-			CartItem item = new CartItem();
+			CartItem item = new CartItem(vo);
 			add(item);
 		}
 	}
