@@ -23,6 +23,7 @@ public class Cart extends Page{
 	
 	//장바구니 역할을 컬렉션 프레임웍 객체를 선언
 	HashMap<Integer,CartVO> cartList; 
+	JPanel p_content;
 	
 	public Cart(ShopMain shopMain) {
 		super(shopMain);
@@ -38,7 +39,7 @@ public class Cart extends Page{
 		bt_container.setPreferredSize(new Dimension(ShopMain.WIDTH, 100));
 		bt_container.setBackground(Color.CYAN);
 		
-		getCartList();
+		//getCartList();
 		
 		bt_container.add(bt_pay);
 		bt_container.add(bt_del);
@@ -62,19 +63,39 @@ public class Cart extends Page{
 	
 	//장바구니 목록 가져오기 (주의: 맵은 순서가 없는 집합이므로 먼저 일렬로 늘어뜨려야 한다..그 후 접근..)
 	public void getCartList() {
+		
 		Set<Integer> set = cartList.keySet(); //키들을 set으로 반환받는다..즉 맵은 한번에 일렬로 늘어서는 것이 아니라,  set으로 먼저
 									//key를 가져와야 함
 		
 		Iterator<Integer> it = set.iterator();
 		
+		//add()하기 전에 기존에 붙어있던 모든 컴포넌트는 제거
+		int count=0;
+		if(p_content!=null) {
+			this.remove(p_content);
+			this.revalidate();
+			this.updateUI();
+			this.repaint();
+		}
+		
+		p_content = new JPanel();
+		p_content.setPreferredSize(new Dimension(ShopMain.WIDTH-350, 500));
+		
 		while(it.hasNext()) {//요소가 있는 동안..
 			int key=it.next();//요소를 추출
+			System.out.println("key : "+key);
 			CartVO vo=cartList.get(key);
 			//디자인을 표현하는 CartItem에 CartVO의 정보를 채워넣자!!
 			CartItem item = new CartItem(vo);
-			add(item);
+			p_content.add(item);
+			count++;
 		}
+		add(p_content);
+		this.updateUI();
+		
+		System.out.println("count is "+count);
 	}
+	
 }
 
 

@@ -95,6 +95,8 @@ public class ProductDetail extends Page{
 		
 		//장바구니 페이지 열기 
 		bt_cart.addActionListener((e)->{
+			
+
 			registCart(); //장바구니에 상품 추가하기!!!
 			
 			//장바구니에 정보가 담겼다고 알려주고, 장바구니 이동 여부를 확인해야 함
