@@ -66,6 +66,14 @@ public class Cart extends Page{
 		
 	}
 	
+	//장바구니 변경 
+	public void updateCart(CartVO vo) {
+		// 해시맵에 들어있는 객체 중 해당 객체를 찾아내어, vo교체!!!
+		CartVO obj=cartList.get(vo.getProduct_id());//검색!!
+		obj=vo;//기존 해시맵이 가지고 잇던 vo를 찾아내어 주소 변경 
+	}
+	
+	
 	//장바구니 목록 가져오기 (주의: 맵은 순서가 없는 집합이므로 먼저 일렬로 늘어뜨려야 한다..그 후 접근..)
 	public void getCartList() {
 		
@@ -95,8 +103,18 @@ public class Cart extends Page{
 			CartItem item = new CartItem(vo);
 			
 			item.bt_del.addActionListener((e)->{
-				if(JOptionPane.showInternalConfirmDialog(Cart.this, "장바구니에서 삭제하시겠어요?")==JOptionPane.OK_OPTION) {
-					removeCart();
+				if(JOptionPane.showConfirmDialog(Cart.this, "장바구니에서 삭제하시겠어요?")==JOptionPane.OK_OPTION) {
+					removeCart(vo.getProduct_id());
+					getCartList();
+				}
+			});
+			
+			item.bt_update.addActionListener((e)->{
+				if(JOptionPane.showConfirmDialog(Cart.this, "장바구니를 수정하시겠어요?")==JOptionPane.OK_OPTION) {
+					int ea = Integer.parseInt(item.t_ea.getText()); //수정한 갯수구하기!! 
+					vo.setEa(ea);//변경된 갯수를 vo에 반영한 후에 전달..
+					updateCart(vo);
+					getCartList();
 				}
 			});
 			
