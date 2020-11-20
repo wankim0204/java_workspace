@@ -5,10 +5,17 @@
  * */
 package com.swingmall.cart;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import com.swingmall.main.ShopMain;
 
 public class CartItem extends JPanel{
 	JPanel p_can; //상품 이미지 
@@ -18,7 +25,54 @@ public class CartItem extends JPanel{
 	JTextField t_ea;
 	JButton bt_update;//수량변경 적용 버튼
 	
+	public CartItem() {
+		p_can = new JPanel() {
+			public void paint(Graphics g) {
+				g.setColor(Color.BLUE);
+				g.fillRect(0, 0, 100, 100);
+			}
+		};
+		p_info = new JPanel();
+		la_brand = new JLabel("톰보이");
+		la_product_name = new JLabel("경량패딩");
+		la_price = new JLabel("4500000");
+		la_ea = new JLabel("수량");
+		t_ea = new JTextField(1);
+		bt_update = new JButton("변경 적용");
+		
+		//스타일
+		this.setPreferredSize(new Dimension(ShopMain.WIDTH-250, 120));
+		this.setBackground(Color.YELLOW);
+		p_can.setPreferredSize(new Dimension(100, 85));
+		p_info.setPreferredSize(new Dimension(250, 120));
+		p_info.setBackground(Color.WHITE);
+		
+		la_ea.setPreferredSize(new Dimension(40, 25));
+		t_ea.setPreferredSize(new Dimension(50, 25));
+		bt_update.setBackground(Color.BLUE);
+		bt_update.setForeground(Color.YELLOW);
+		
+		//조립 
+		p_info.setLayout(new GridLayout(3,1));
+		this.add(p_can);
+		p_info.add(la_brand);
+		p_info.add(la_product_name);
+		p_info.add(la_price);
+		this.add(p_info);
+		this.add(la_ea);
+		this.add(t_ea);
+		this.add(bt_update);		
+	}
+	
 }
+
+
+
+
+
+
+
+
 
 
 
