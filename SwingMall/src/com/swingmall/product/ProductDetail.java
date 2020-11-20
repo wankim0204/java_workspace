@@ -8,6 +8,7 @@ import java.awt.Image;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.swingmall.admin.product.ProductVO;
@@ -90,6 +91,21 @@ public class ProductDetail extends Page{
 		p_content.add(p_option);
 		
 		add(p_content);
+		
+		//장바구니 페이지 열기 
+		bt_cart.addActionListener((e)->{
+			registCart(); //장바구니에 상품 추가하기!!!
+			
+			//장바구니에 정보가 담겼다고 알려주고, 장바구니 이동 여부를 확인해야 함
+			int ans=JOptionPane.showConfirmDialog(ProductDetail.this, "장바구니에 상품이 담겼습니다.\n장바구니로 이동하시겠어요?");
+			
+			if(ans == JOptionPane.OK_OPTION) {
+				getShopMain().showPage(ShopMain.CART);
+			}
+			
+		});
+		
+
 	}
 	
 	//상세페이지가 보여질때 데이터를 채워넣는 메서드 (생성자에서 하면 디자인 처리에 타이밍적인 제한이 많다)
@@ -99,6 +115,11 @@ public class ProductDetail extends Page{
 		la_price.setText(Integer.toString(vo.getPrice()));
 		this.img=img;
 		this.img= this.img.getScaledInstance(500, 550, Image.SCALE_SMOOTH);
+	}
+	
+	//장바구니에 등록(DB로 보관하지 않고, 오직 메모리상으로 저장할 예정)
+	public void registCart() {
+		
 	}
 	
 	public ProductVO getVo() {

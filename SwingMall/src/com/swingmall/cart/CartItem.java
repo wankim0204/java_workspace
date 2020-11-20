@@ -37,18 +37,18 @@ public class CartItem extends JPanel{
 		la_product_name = new JLabel("경량패딩");
 		la_price = new JLabel("4500000");
 		la_ea = new JLabel("수량");
-		t_ea = new JTextField(1);
+		t_ea = new JTextField("1",4);
 		bt_update = new JButton("변경 적용");
 		
 		//스타일
-		this.setPreferredSize(new Dimension(ShopMain.WIDTH-250, 120));
+		this.setPreferredSize(new Dimension(ShopMain.WIDTH-450, 115));
 		this.setBackground(Color.YELLOW);
 		p_can.setPreferredSize(new Dimension(100, 85));
-		p_info.setPreferredSize(new Dimension(250, 120));
+		p_info.setPreferredSize(new Dimension(400, 100));
 		p_info.setBackground(Color.WHITE);
 		
 		la_ea.setPreferredSize(new Dimension(40, 25));
-		t_ea.setPreferredSize(new Dimension(50, 25));
+		t_ea.setPreferredSize(new Dimension(100, 25));
 		bt_update.setBackground(Color.BLUE);
 		bt_update.setForeground(Color.YELLOW);
 		

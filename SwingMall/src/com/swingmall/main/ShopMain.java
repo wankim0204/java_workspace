@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import com.swingmall.board.QnA;
+import com.swingmall.cart.Cart;
 import com.swingmall.home.Home;
 import com.swingmall.member.Login;
 import com.swingmall.member.MyPage;
@@ -38,6 +39,7 @@ public class ShopMain extends JFrame{
 	public static final int LOGIN=4;
 	public static final int PRODUCT_DETAIL=5;
 	public static final int MEMBER_REGIST=6;
+	public static final int CART=7;
 	
 		
 	JPanel user_container;//관리자,사용자 화면을 구분지을수 있는 컨테이너
@@ -49,7 +51,7 @@ public class ShopMain extends JFrame{
 	public JButton[] navi=new JButton[navi_title.length];//[][][][][] 배열생성
 	
 	//페이지 구성 
-	Page[] page =new Page[7];//최상위페이지들
+	Page[] page =new Page[8];//페이지들
 	
 	JLabel la_footer;//윈도우 하단의 카피라이트 영역
 	private DBManager dbManager;
@@ -90,6 +92,7 @@ public class ShopMain extends JFrame{
 		page[4] = new Login(this);
 		page[5] = new ProductDetail(this);
 		page[6] = new RegistForm(this); //회원가입 폼
+		page[7] = new Cart(this);
 	
 		//스타일적용
 		user_container.setPreferredSize(new Dimension(WIDTH, HEIGHT-50));
