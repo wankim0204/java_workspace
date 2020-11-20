@@ -58,9 +58,23 @@ public class RegistForm extends Page{
 		bt_regist.addActionListener((e)->{
 			
 			if( checkId(t_mid.getText()) ) {
-				JOptionPane.showMessageDialog(RegistForm.this, "중복된 아이디입니다/n다른 아이디를 사용하세요");
+				JOptionPane.showMessageDialog(RegistForm.this, "중복된 아이디입니다\n다른 아이디를 사용하세요");
 			}else {
-				regist(vo); // vo 값을 제대로 넣어 완성하기 10시5분 수업시작..
+				//메서드 호출하기전에, VO값을 채워야 한다!!
+				ShopMember vo = new ShopMember(); //Empty 상태임
+				vo.setMid(t_mid.getText());//아이디 넣기 
+				vo.setPass(new String(t_pass.getPassword()));//비번 넣기
+				vo.setName(t_name.getText());
+				vo.setPhone(t_phone.getText());
+				vo.setEmail(t_email.getText());
+				
+				int result = regist(vo); // vo 값을 제대로 넣어 완성하기 10시5분 수업시작..
+				
+				if(result==0) {
+					JOptionPane.showMessageDialog(RegistForm.this, "등록실패");
+				}else {
+					JOptionPane.showMessageDialog(RegistForm.this, "회원가입 성공");
+				}
 			}
 			
 		});
