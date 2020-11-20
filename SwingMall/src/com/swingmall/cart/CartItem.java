@@ -13,6 +13,7 @@ import java.awt.Image;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -29,8 +30,9 @@ public class CartItem extends JPanel{
 	JButton bt_update;//수량변경 적용 버튼
 	JButton bt_del;//장바구니에서 제거
 	Image image;
-	
+
 	public CartItem(CartVO cartVO) {
+
 		image=ImageUtil.getCustomSize(ImageUtil.getImageFromURL(cartVO.getFilename()) , 100,85);
 		
 		p_can = new JPanel() {
@@ -75,6 +77,7 @@ public class CartItem extends JPanel{
 		this.add(bt_del);		
 		
 		p_can.repaint();
+
 	}
 	
 }

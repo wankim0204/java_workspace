@@ -6,11 +6,15 @@ package com.swingmall.cart;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.swingmall.main.Page;
@@ -23,7 +27,7 @@ public class Cart extends Page{
 	
 	//장바구니 역할을 컬렉션 프레임웍 객체를 선언
 	HashMap<Integer,CartVO> cartList; 
-	JPanel p_content;
+	JPanel p_content; //Cart에 직접붙이지말고, 아이템들을 붙일 컨테이너 준비한다
 	
 	public Cart(ShopMain shopMain) {
 		super(shopMain);
@@ -51,9 +55,10 @@ public class Cart extends Page{
 	public void addCart(CartVO vo) { //상품1건을 장바구니에 추가하기!!!
 		cartList.put(vo.getProduct_id(), vo);  //key와 값을 저장
 	}
+	
 	//장바구니 삭제하기
-	public void removeCart() { //상품1건을 장바구니에서 제거하기
-		
+	public void removeCart(int product_id) { //상품1건을 장바구니에서 제거하기
+		cartList.remove(product_id);
 	}
 	
 	//장바구니 비우기
@@ -71,15 +76,16 @@ public class Cart extends Page{
 		
 		//add()하기 전에 기존에 붙어있던 모든 컴포넌트는 제거
 		int count=0;
-		if(p_content!=null) {
-			this.remove(p_content);
+		if(p_content!=null) { //존재한다면...기존꺼 지우자
+			this.remove(p_content);//제거
 			this.revalidate();
 			this.updateUI();
 			this.repaint();
 		}
 		
+		//동적으로 새로 생성
 		p_content = new JPanel();
-		p_content.setPreferredSize(new Dimension(ShopMain.WIDTH-350, 500));
+		p_content.setPreferredSize(new Dimension(ShopMain.WIDTH-350, 600));
 		
 		while(it.hasNext()) {//요소가 있는 동안..
 			int key=it.next();//요소를 추출
@@ -87,10 +93,17 @@ public class Cart extends Page{
 			CartVO vo=cartList.get(key);
 			//디자인을 표현하는 CartItem에 CartVO의 정보를 채워넣자!!
 			CartItem item = new CartItem(vo);
-			p_content.add(item);
+			
+			item.bt_del.addActionListener((e)->{
+				if(JOptionPane.showInternalConfirmDialog(Cart.this, "장바구니에서 삭제하시겠어요?")==JOptionPane.OK_OPTION) {
+					removeCart();
+				}
+			});
+			
+			p_content.add(item);//Cart에 직접 붙이지말고, 동적으로 생성한 p_content에 붙이자
 			count++;
 		}
-		add(p_content);
+		add(p_content);//Cart에 p_content를 동적으로 추가
 		this.updateUI();
 		
 		System.out.println("count is "+count);
