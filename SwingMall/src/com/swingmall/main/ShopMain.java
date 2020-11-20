@@ -46,7 +46,7 @@ public class ShopMain extends JFrame{
 	JPanel p_navi; //웹사이트의 주 메뉴를 포함할 컨테이너 패널
 	
 	String[] navi_title= {"Home","Product","QnA","MyPage","Login"};
-	JButton[] navi=new JButton[navi_title.length];//[][][][][] 배열생성
+	public JButton[] navi=new JButton[navi_title.length];//[][][][][] 배열생성
 	
 	//페이지 구성 
 	Page[] page =new Page[7];//최상위페이지들
@@ -54,6 +54,10 @@ public class ShopMain extends JFrame{
 	JLabel la_footer;//윈도우 하단의 카피라이트 영역
 	private DBManager dbManager;
 	private Connection con;
+	
+	//로그인 상태인지 여부를 알수있는 변수
+	private boolean hasSession=false;
+	
 	
 	
 	public ShopMain() {
@@ -130,9 +134,27 @@ public class ShopMain extends JFrame{
 				}else if(obj==navi[2]) {
 					showPage(2);
 				}else if(obj==navi[3]) {
-					showPage(3);
+					//mypage 는 무조건 보여줘서는 안되고, 로그인한 사람에게만 보여줘야 함!!
+					//로그인 상태가 아니라면 욕!!
+					if(hasSession==false) {
+						JOptionPane.showMessageDialog(ShopMain.this,"로그인이 필요한 서비스입니다");
+					}else {
+						showPage(3);
+					}
+					
 				}else if(obj==navi[4]) {
-					showPage(4);
+					//로그인을 요청할지, 로그아웃을 요청할지를 구분하자!!
+					//hasSession의 값이 true 일때는 로그인한 상태이므로, 로그아웃을 요청해야 한다..
+					if(hasSession) {
+						int ans = JOptionPane.showConfirmDialog(ShopMain.this, "로그아웃 하시겠습니까?");
+						
+						if(ans==JOptionPane.OK_OPTION) {//예를 누른것임
+							Login loginPage = (Login)page[ShopMain.LOGIN];
+							loginPage.logout();
+						}
+					}else {
+						showPage(4);//로그인						
+					}
 				}
 			});
 		}		
@@ -171,6 +193,16 @@ public class ShopMain extends JFrame{
 		return page;
 	}
 	
+	public boolean isHasSession() {
+		return hasSession;
+	}
+
+
+	public void setHasSession(boolean hasSession) {
+		this.hasSession = hasSession;
+	}
+
+
 	public static void main(String[] args) {
 		new ShopMain();
 

@@ -55,21 +55,36 @@ public class Login extends Page{
 		
 		//로그인 버튼과 리스너연결 
 		bt_login.addActionListener((e)->{
-			login();
+			ShopMember vo = new ShopMember();
+			vo.setMid(t_id.getText());
+			vo.setPass(new String(t_pass.getPassword()));
+			
+			validCheck(vo);
 		});
+		
 		
 		//키보드 리스너 연결
 		t_id.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode()==KeyEvent.VK_ENTER) {//엔터치면..
-					login();					
+					ShopMember vo = new ShopMember();
+					vo.setMid(t_id.getText());
+					vo.setPass(new String(t_pass.getPassword()));
+					
+					validCheck(vo);
+			
 				}
 			}
 		});
 		t_pass.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode()==KeyEvent.VK_ENTER) {//엔터치면..
-					login();					
+					ShopMember vo = new ShopMember();
+					vo.setMid(t_id.getText());
+					vo.setPass(new String(t_pass.getPassword()));
+					
+					validCheck(vo);
+					
 				}
 			}
 		});
@@ -80,7 +95,19 @@ public class Login extends Page{
 		}else if(shopMember.getPass().length()<1) {
 			JOptionPane.showMessageDialog(this, "비밀번호를 입력하세요");
 		}else {
-			login(shopMember);
+			
+			if(login(shopMember)==null) {
+				JOptionPane.showMessageDialog(this, "로그인 정보가 올바르지 않습니다");	
+			}else {
+				JOptionPane.showMessageDialog(this, "로그인 성공");
+				//Home 페이지 보여주기!!
+				getShopMain().showPage(ShopMain.HOME);
+				//버튼의 라벨을 로그아웃으로 전환
+				getShopMain().navi[4].setText("logout");
+				getShopMain().navi[4].setBackground(Color.BLUE);
+				getShopMain().navi[4].setForeground(Color.WHITE);
+				getShopMain().setHasSession(true);//로그인 상태임을 알수있는 값 true
+			}
 		}		
 	}
 	
@@ -118,6 +145,16 @@ public class Login extends Page{
 			getShopMain().getDbManager().close(pstmt, rs);
 		}
 		return vo;
+	}
+	
+	//로그아웃 처리 
+	//1.hasSession의 값을 false 2.버튼의 배경색 빼기  3.버튼의 텍스트 login으로 바꾸기 4.페이지는 Home으로 
+	public void logout() {
+		getShopMain().setHasSession(false);
+		getShopMain().navi[4].setBackground(null);
+		getShopMain().navi[4].setForeground(null);
+		getShopMain().navi[4].setText("login");
+		getShopMain().showPage(ShopMain.HOME);
 	}
 }
 
