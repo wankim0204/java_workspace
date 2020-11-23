@@ -32,6 +32,8 @@ public class AppMain extends Application{
 		bt.setPrefWidth(200);
 		bt.setPrefHeight(40);
 		
+		
+		
 		//버튼을 parent 에 부착하기 
 		parent.getChildren().add(bt);
 		javafx.scene.control.TextField t = new javafx.scene.control.TextField("test");
@@ -44,8 +46,9 @@ public class AppMain extends Application{
 		});
 		
 		
-		stage.setMaxWidth(500);
-		stage.setMaxHeight(500);
+		stage.setHeight(500);
+		stage.setWidth(500);
+		
 		stage.show(); //윈도우 보이게
 	}
 
