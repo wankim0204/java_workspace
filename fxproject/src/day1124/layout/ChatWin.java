@@ -17,7 +17,7 @@ public class ChatWin extends Application{
 		TextField t = new TextField();
 		Button bt = new Button("ok");
 		TextArea area = new TextArea();
-		
+		t.setPrefSize(400, 25);
 		flow.setPrefSize(500, 40);
 		flow.getChildren().add(t);
 		flow.getChildren().add(bt);
