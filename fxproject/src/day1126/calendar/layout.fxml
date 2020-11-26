@@ -11,7 +11,7 @@
 			<children>
 				<ChoiceBox fx:id="ch_yy"></ChoiceBox>
 				<ChoiceBox fx:id="ch_mm"></ChoiceBox>
-				<Button text="ok"></Button>
+				<Button fx:id="bt" text="ok"></Button>
 			</children>			
 		</FlowPane>
 	</top>	
