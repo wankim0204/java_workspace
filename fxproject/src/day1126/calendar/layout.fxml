@@ -7,16 +7,16 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1">
 	<top>
-		<FlowPane alignment="CENTER" prefHeight="35" hgap="10">
+		<FlowPane id="flow" stylesheets="@base.css" alignment="CENTER" prefHeight="35" hgap="10">
 			<children>
-				<ChoiceBox></ChoiceBox>
-				<ChoiceBox></ChoiceBox>
+				<ChoiceBox fx:id="ch_yy"></ChoiceBox>
+				<ChoiceBox fx:id="ch_mm"></ChoiceBox>
 				<Button text="ok"></Button>
 			</children>			
 		</FlowPane>
 	</top>	
 	<center>
-		<TilePane></TilePane>
+		<TilePane fx:id="tilePane"></TilePane>
 	</center>
 </BorderPane>
 
