@@ -26,7 +26,7 @@ public class PageMain extends Application{
 	
 	public void start(Stage stage) throws Exception {
 		border = new BorderPane();
-		
+
 		//xml로 디자인된 파일을 자바객체로 변환하기!!(안드로이드에서는 이 과정을 inflation이라 함)
 		
 		//반환되는 컨테이너가 무엇인지 예측할수 없으므로, 보다 상위자료형으로 받자!!
@@ -38,7 +38,7 @@ public class PageMain extends Application{
 			btn[i] = new Button(naviTitle[i]);
 			
 			btn[i].setId(Integer.toString(i)); //버튼에 정보 심기!!
-			
+					
 			//버튼에 액션이벤트 연결 
 			btn[i].setOnAction((e)->{
 				Button bt=(Button)e.getSource();//이벤트를 일으킨 컴포넌트를 구해옴
