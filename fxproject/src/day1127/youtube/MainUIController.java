@@ -57,7 +57,12 @@ public class MainUIController implements Initializable{
 			WebView webView=(WebView)borderPane.lookup("#webView");
 			Label la_title = (Label)borderPane.lookup("#la_title");
 			
-			webView.getEngine().load(t_url.getText());
+			//webView.getEngine().load(t_url.getText());
+			//StringBuffer sb = new StringBuffer();
+			//sb.append("<iframe width=\"200\" height=\"155\" src=\""+t_url.getText()+"\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>");
+			//System.out.println(sb.toString());
+	
+			webView.getEngine().loadContent(t_url.getText() , "text/html");
 			la_title.setText(t_title.getText());
 			
 			//로그된 유투브 썸네일을 , 타일 컨테이너에 부착!!
